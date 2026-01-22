@@ -12,7 +12,7 @@ const AppState = {
 };
 
 // === CONSTANTS ===
-const POLLINATIONS_API = 'https://image.pollinations.ai/prompt/';
+const POLLINATIONS_API = 'https://image.pollinations.ai/prompt/'; // API gratuite
 const STORAGE_KEYS = {
     HISTORY: 'imageai_history',
     SETTINGS: 'imageai_settings'
@@ -57,7 +57,7 @@ function registerServiceWorker() {
     }
 }
 
-// === PWA INSTALL PROMPT ===
+// === PWA INSTALL PROMPT configure l'installation===
 let deferredPrompt;
 
 function setupPWAInstall() {
@@ -206,7 +206,7 @@ function switchScreen(screenName) {
     AppState.currentScreen = screenName;
 }
 
-// === GENERATE IMAGE ===
+// === Lance la génération de l'image ===
 async function handleGenerate() {
     const promptInput = document.getElementById('prompt-input');
     const prompt = promptInput.value.trim();
@@ -254,6 +254,7 @@ async function handleGenerate() {
     }
 }
 
+//====Appel l'API====      
 async function generateImageWithPollinations(prompt, size) {
     const generateBtn = document.getElementById('generate-btn');
     generateBtn.disabled = true;
@@ -274,10 +275,10 @@ async function generateImageWithPollinations(prompt, size) {
             height = 1792;
         }
         
-        // Pollinations.ai URL format
+        // Pollinations.ai URL format //enhance=true meilleur qualité  // nologo=true pas de watermark
         const imageUrl = `${POLLINATIONS_API}${encodedPrompt}?width=${width}&height=${height}&nologo=true&enhance=true`;
         
-        // Preload image to ensure it's generated
+        // Preload image to ensure it's generated attends que l'image soit charger
         await new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = () => resolve();
@@ -313,6 +314,7 @@ function hideLoading() {
     placeholder.style.display = 'flex';
 }
 
+// Affiche l'image
 function showPreviewImage(imageUrl) {
     const loading = document.getElementById('preview-loading');
     const placeholder = document.getElementById('preview-placeholder');
@@ -333,7 +335,7 @@ function hidePreviewImage() {
     imageContainer.style.display = 'none';
 }
 
-// === HISTORY ===
+// === HISTORY met a jour la grille===
 function updateHistoryDisplay() {
     const historyGrid = document.getElementById('history-grid');
     if (!historyGrid) return;

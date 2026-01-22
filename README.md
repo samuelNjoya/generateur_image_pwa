@@ -422,3 +422,39 @@ Pour toute question :
 **Développé avec ❤️ pour rendre l'IA accessible à tous**
 
 *ImageAI v1.0.0 - 100% Gratuit*
+
+C'est quoi un Service Worker ?
+
+Un script qui tourne en arrière-plan
+Intercepte les requêtes réseau
+Peut mettre en cache des fichiers
+Permet le mode hors ligne
+
+
+// 1. manifest.json dit "je suis une app"
+// 2. Service Worker met en cache les fichiers
+// 3. Le navigateur propose l'installation
+// 4. L'utilisateur clique "Installer"
+// 5. Icône apparaît sur l'écran d'accueil
+
+✅ CHECKLIST - Ce que vous devez pouvoir expliquer
+Niveau 1 - Basique ✅
+
+ C'est quoi une PWA ?
+ Pourquoi 9 fichiers ?
+ Comment fonctionne l'API Pollinations ?
+ Où sont stockées les images ?
+
+Niveau 2 - Intermédiaire 📚
+
+ Comment fonctionne le Service Worker ?
+ C'est quoi localStorage ?
+ Pourquoi async/await ?
+ Comment l'app fonctionne hors ligne ?
+
+Niveau 3 - Avancé 🚀
+
+ Flux complet de génération d'image
+ Stratégies de cache (cache-first vs network-first)
+ Gestion des événements (event listeners)
+ Pourquoi CORS était bloqué avec Hugging Face
