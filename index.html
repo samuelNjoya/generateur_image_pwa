@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0A0E27">
+    <meta name="description" content="Générez des images incroyables avec DALL-E 3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ImageAI">
+    
+    <title>ImageAI - DALL-E 3</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon-512.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div id="app">
+        
+        <!-- Splash Screen -->
+        <div id="splash-screen" class="splash-screen">
+            <div class="splash-content">
+                <div class="splash-logo">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FF6B9D;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#C65BCF;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="100" cy="100" r="80" fill="url(#gradient1)" opacity="0.2"/>
+                        <path d="M 60 100 Q 100 60, 140 100 T 140 140" stroke="url(#gradient1)" stroke-width="8" fill="none" stroke-linecap="round"/>
+                        <circle cx="75" cy="85" r="8" fill="url(#gradient1)"/>
+                        <circle cx="125" cy="85" r="8" fill="url(#gradient1)"/>
+                    </svg>
+                </div>
+                <h1 class="splash-title">ImageAI</h1>
+                <p class="splash-subtitle">Propulsé par DALL-E 3</p>
+                <div class="splash-loader"></div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header id="app-header" class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo-mini">
+                        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="miniGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#FF6B9D;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="20" cy="20" r="18" fill="url(#miniGradient)"/>
+                        </svg>
+                    </div>
+                    <h1 class="app-title" id="page-title">Générer</h1>
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" id="refresh-btn" title="Rafraîchir">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main id="main-content" class="main-content">
+            
+            <!-- Screen 1: Generator -->
+            <div id="screen-generator" class="screen active">
+                <div class="generator-container">
+                    
+                    <!-- Preview Area -->
+                    <div class="preview-area" id="preview-area">
+                        <div class="preview-placeholder" id="preview-placeholder">
+                            <div class="placeholder-icon">
+                                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="placeholderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#FF6B9D;stop-opacity:0.3" />
+                                            <stop offset="100%" style="stop-color:#6366F1;stop-opacity:0.3" />
+                                        </linearGradient>
+                                    </defs>
+                                    <rect x="20" y="30" width="80" height="60" rx="8" fill="none" stroke="url(#placeholderGrad)" stroke-width="3"/>
+                                    <circle cx="40" cy="50" r="8" fill="url(#placeholderGrad)"/>
+                                    <path d="M 30 75 L 50 60 L 70 70 L 90 55" stroke="url(#placeholderGrad)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <p class="placeholder-text">Votre image apparaîtra ici</p>
+                        </div>
+                        <div class="preview-image-container" id="preview-image-container" style="display: none;">
+                            <img id="preview-image" alt="Image générée" />
+                            <div class="preview-actions">
+                                <button class="preview-btn download-btn" id="preview-download-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                    </svg>
+                                    Télécharger
+                                </button>
+                            </div>
+                        </div>
+                        <div class="preview-loading" id="preview-loading" style="display: none;">
+                            <div class="loading-spinner"></div>
+                            <p class="loading-text">Création en cours...</p>
+                            <p class="loading-subtext">Cela peut prendre quelques secondes</p>
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="input-area">
+                        <div class="input-group">
+                            <label for="prompt-input" class="input-label">Décrivez votre image</label>
+                            <textarea 
+                                id="prompt-input" 
+                                class="prompt-input" 
+                                placeholder="Un chat astronaute explorant une galaxie colorée..."
+                                rows="3"
+                            ></textarea>
+                            <div class="input-counter">
+                                <span id="char-count">0</span> / 4000
+                            </div>
+                        </div>
+
+                        <div class="size-selector">
+                            <label class="input-label">Taille de l'image</label>
+                            <div class="size-options">
+                                <button class="size-option active" data-size="1024x1024">
+                                    <div class="size-icon square"></div>
+                                    <span>Carré</span>
+                                    <small>1024×1024</small>
+                                </button>
+                                <button class="size-option" data-size="1792x1024">
+                                    <div class="size-icon landscape"></div>
+                                    <span>Paysage</span>
+                                    <small>1792×1024</small>
+                                </button>
+                                <button class="size-option" data-size="1024x1792">
+                                    <div class="size-icon portrait"></div>
+                                    <span>Portrait</span>
+                                    <small>1024×1792</small>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="generate-btn" id="generate-btn">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4l4.2-4.2"/>
+                            </svg>
+                            <span class="btn-text">Générer l'image</span>
+                        </button>
+
+                        <div class="cost-estimate">
+                            <small>Coût estimé: <strong>~$0.04</strong> par image</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 2: History -->
+            <div id="screen-history" class="screen">
+                <div class="history-container">
+                    <div class="history-header">
+                        <h2 class="section-title">Historique</h2>
+                        <button class="clear-history-btn" id="clear-history-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                            Effacer tout
+                        </button>
+                    </div>
+                    
+                    <div class="history-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-images">0</div>
+                            <div class="stat-label">Images générées</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-cost">$0.00</div>
+                            <div class="stat-label">Coût estimé</div>
+                        </div>
+                    </div>
+
+                    <div class="history-grid" id="history-grid">
+                        <div class="empty-state">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="60" cy="60" r="40" fill="none" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                                <path d="M 40 60 L 50 70 L 70 50" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/>
+                            </svg>
+                            <p>Aucune image générée</p>
+                            <small>Vos créations apparaîtront ici</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 3: Settings -->
+            <div id="screen-settings" class="screen">
+                <div class="settings-container">
+                    <h2 class="section-title">Paramètres</h2>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-subtitle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Clé API OpenAI
+                        </h3>
+                        <p class="settings-description">
+                            Votre clé API est stockée localement et en toute sécurité sur votre appareil.
+                        </p>
+                        
+                        <div class="input-group">
+                            <div class="api-key-input-wrapper">
+                                <input 
+                                    type="password" 
+                                    id="api-key-input" 
+                                    class="api-key-input" 
+                                    placeholder="sk-proj-xxxxxxxxxx"
+                                />
+                                <button class="toggle-visibility-btn" id="toggle-api-visibility">
+                                    <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="api-key-status" id="api-key-status"></div>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="secondary-btn" id="save-api-key-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                    <polyline points="17 21 17 13 7 13 7 21"/>
+                                    <polyline points="7 3 7 8 15 8"/>
+                                </svg>
+                                Enregistrer
+                            </button>
+                            <button class="secondary-btn" id="test-api-key-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                                </svg>
+                                Tester
+                            </button>
+                        </div>
+
+                        <div class="info-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                            <div>
+                                <strong>Où obtenir une clé API ?</strong>
+                                <p>Rendez-vous sur <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3 class="settings-subtitle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            Données de l'application
+                        </h3>
+                        
+                        <button class="danger-btn" id="reset-app-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="1 4 1 10 7 10"/>
+                                <polyline points="23 20 23 14 17 14"/>
+                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                            </svg>
+                            Réinitialiser l'application
+                        </button>
+                        <small class="danger-text">Cette action supprimera toutes vos données locales</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 4: About -->
+            <div id="screen-about" class="screen">
+                <div class="about-container">
+                    <div class="about-logo">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="aboutGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#FF6B9D;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#C65BCF;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="100" cy="100" r="80" fill="url(#aboutGradient)" opacity="0.2"/>
+                            <path d="M 60 100 Q 100 60, 140 100 T 140 140" stroke="url(#aboutGradient)" stroke-width="8" fill="none" stroke-linecap="round"/>
+                            <circle cx="75" cy="85" r="8" fill="url(#aboutGradient)"/>
+                            <circle cx="125" cy="85" r="8" fill="url(#aboutGradient)"/>
+                        </svg>
+                    </div>
+                    
+                    <h1 class="about-title">ImageAI</h1>
+                    <p class="about-version">Version 1.0.0</p>
+                    
+                    <div class="about-content">
+                        <div class="about-section">
+                            <h3>À propos</h3>
+                            <p>ImageAI est une application web progressive (PWA) qui vous permet de générer des images exceptionnelles grâce à l'intelligence artificielle DALL-E 3 d'OpenAI.</p>
+                        </div>
+
+                        <div class="about-section">
+                            <h3>Fonctionnalités</h3>
+                            <ul class="feature-list">
+                                <li>✨ Génération d'images par IA</li>
+                                <li>📱 Application installable (PWA)</li>
+                                <li>📚 Historique complet</li>
+                                <li>💾 Téléchargement des images</li>
+                                <li>🎨 3 formats disponibles</li>
+                                <li>🔒 Sécurité et confidentialité</li>
+                            </ul>
+                        </div>
+
+                        <div class="about-section">
+                            <h3>Technologie</h3>
+                            <p>Propulsé par <strong>DALL-E 3</strong>, le modèle de génération d'images le plus avancé d'OpenAI.</p>
+                        </div>
+
+                        <div class="about-section">
+                            <h3>Confidentialité</h3>
+                            <p>Toutes vos données (clé API, historique) sont stockées localement sur votre appareil. Rien n'est envoyé à des serveurs tiers, excepté les requêtes à l'API OpenAI pour générer vos images.</p>
+                        </div>
+
+                        <div class="about-links">
+                            <a href="https://openai.com/dall-e-3" target="_blank" class="about-link">
+                                En savoir plus sur DALL-E 3
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                    <polyline points="15 3 21 3 21 9"/>
+                                    <line x1="10" y1="14" x2="21" y2="3"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <p class="about-footer">
+                        Fait avec ❤️ pour les créatifs
+                    </p>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-screen="generator">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4l4.2-4.2"/>
+                </svg>
+                <span class="nav-label">Générer</span>
+            </button>
+            <button class="nav-item" data-screen="history">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span class="nav-label">Historique</span>
+            </button>
+            <button class="nav-item" data-screen="settings">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4l4.2-4.2"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                <span class="nav-label">Paramètres</span>
+            </button>
+            <button class="nav-item" data-screen="about">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span class="nav-label">À propos</span>
+            </button>
+        </nav>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+
+        <!-- Image Modal -->
+        <div id="image-modal" class="image-modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <button class="modal-close" id="modal-close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+                <img id="modal-image" alt="Image en plein écran" />
+                <div class="modal-info">
+                    <p id="modal-prompt"></p>
+                    <div class="modal-actions">
+                        <button class="modal-btn" id="modal-download-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            Télécharger
+                        </button>
+                        <button class="modal-btn danger" id="modal-delete-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
