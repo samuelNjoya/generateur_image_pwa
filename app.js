@@ -12,7 +12,7 @@ const AppState = {
 };
 
 // === CONSTANTS ===
-const HUGGING_FACE_API = 'https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0';
+const POLLINATIONS_API = 'https://image.pollinations.ai/prompt/';
 const STORAGE_KEYS = {
     HISTORY: 'imageai_history',
     SETTINGS: 'imageai_settings'
@@ -224,8 +224,7 @@ async function handleGenerate() {
     showLoading();
 
     try {
-        const imageBlob = await generateImageWithHuggingFace(prompt);
-        const imageUrl = URL.createObjectURL(imageBlob);
+        const imageUrl = await generateImageWithPollinations(prompt, AppState.selectedSize);
         
         // Save to history
         const historyItem = {
@@ -255,28 +254,41 @@ async function handleGenerate() {
     }
 }
 
-async function generateImageWithHuggingFace(prompt) {
+async function generateImageWithPollinations(prompt, size) {
     const generateBtn = document.getElementById('generate-btn');
     generateBtn.disabled = true;
 
     try {
-        const response = await fetch(HUGGING_FACE_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                inputs: prompt,
-                options: { wait_for_model: true }
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('API error');
+        // Encode prompt for URL
+        const encodedPrompt = encodeURIComponent(prompt);
+        
+        // Determine dimensions based on size
+        let width = 1024;
+        let height = 1024;
+        
+        if (size === 'landscape') {
+            width = 1792;
+            height = 1024;
+        } else if (size === 'portrait') {
+            width = 1024;
+            height = 1792;
         }
-
-        const blob = await response.blob();
-        return blob;
+        
+        // Pollinations.ai URL format
+        const imageUrl = `${POLLINATIONS_API}${encodedPrompt}?width=${width}&height=${height}&nologo=true&enhance=true`;
+        
+        // Preload image to ensure it's generated
+        await new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve();
+            img.onerror = () => reject(new Error('Failed to load image'));
+            img.src = imageUrl;
+        });
+        
+        return imageUrl;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
     } finally {
         generateBtn.disabled = false;
     }

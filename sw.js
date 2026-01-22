@@ -58,15 +58,13 @@ self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
 
-    // Skip cross-origin requests
+    // Skip ALL external API requests - let them pass through normally
     if (url.origin !== location.origin) {
-        // Don't cache API calls to OpenAI
-        if (url.hostname.includes('openai.com') || url.hostname.includes('api.openai.com')) {
-            return;
-        }
+        // Don't intercept external requests at all
+        return;
     }
 
-    // Cache-first strategy for app assets
+    // Cache-first strategy for app assets only
     event.respondWith(
         caches.match(request)
             .then((cachedResponse) => {
