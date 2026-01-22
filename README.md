@@ -227,3 +227,198 @@ Playground AI :
 
 ✅ 500 images/jour gratuites
 🔗 playgroundai.com
+
+
+# 🎨 ImageAI - Générateur d'images IA gratuit
+
+Une Progressive Web App (PWA) moderne et professionnelle pour générer des images gratuitement avec l'intelligence artificielle.
+
+![ImageAI](icon-512.png)
+
+## ✨ Fonctionnalités
+
+- 🎨 **Génération d'images IA** - Créez des images uniques gratuitement
+- 💯 **100% Gratuit** - Aucun paiement ni inscription requis
+- 📱 **Application installable** - PWA native, installable sur mobile et desktop
+- 📚 **Historique complet** - Sauvegarde de toutes vos créations
+- 💾 **Téléchargement** - Téléchargez vos images en haute qualité
+- 🎯 **3 formats** - Carré, paysage, portrait
+- 🔒 **Confidentialité** - Données stockées localement uniquement
+- 🌐 **Mode hors ligne** - Interface accessible même sans connexion
+- ⚡ **Design professionnel** - Interface épurée et moderne
+
+## 🚀 Installation
+
+### Option 1 : Hébergement sur Netlify (Recommandé)
+
+1. Allez sur [netlify.com](https://www.netlify.com)
+2. Créez un compte gratuit
+3. **Glissez-déposez** tous les fichiers sur Netlify
+4. ✅ Vous obtenez une URL : `https://votre-app.netlify.app`
+5. Partagez l'URL avec qui vous voulez !
+
+### Option 2 : Test local
+
+1. Téléchargez tous les fichiers dans un dossier
+2. Démarrez un serveur local :
+   ```bash
+   python -m http.server 8000
+   ```
+3. Ouvrez `http://localhost:8000`
+
+### Option 3 : Votre hébergeur web
+
+1. Uploadez tous les fichiers via FTP/cPanel
+2. Placez-les dans `public_html` ou `www`
+3. ✅ Accessible via votre domaine
+
+## 📂 Fichiers
+
+```
+imageai/
+├── index.html          # Structure HTML
+├── styles.css          # Design professionnel
+├── app.js              # Logique avec API gratuite
+├── sw.js               # Service Worker (PWA)
+├── manifest.json       # Configuration PWA
+├── icon.svg            # Logo SVG
+├── icon-192.png        # Icône 192x192
+├── icon-512.png        # Icône 512x512
+└── README.md           # Documentation
+```
+
+## 🎨 Design
+
+**Palette de couleurs professionnelle** :
+- Bleu primaire : `#2563EB` (bleu corporate)
+- Accent vert : `#10B981` (vert menthe)
+- Fond : `#111827` (gris foncé)
+- Cartes : `#1F2937`
+
+**Style** :
+- Design flat moderne et minimaliste
+- Police : Inter (système)
+- Pas de dégradés, couleurs solides
+- Interface épurée type Stripe/Linear
+
+## 🛠️ Technologies
+
+- **HTML5** - Structure
+- **CSS3** - Design moderne
+- **JavaScript (Vanilla)** - Logique
+- **Hugging Face API** - IA gratuite (Stable Diffusion XL)
+- **Service Worker** - Support hors ligne
+- **LocalStorage** - Sauvegarde locale
+- **PWA** - Installation et mode app
+
+## 📱 Installation sur mobile
+
+### iOS (iPhone/iPad)
+
+1. Ouvrez l'app dans **Safari**
+2. Appuyez sur **Partager** 
+3. Sélectionnez **Sur l'écran d'accueil**
+4. Confirmez
+
+### Android
+
+1. Ouvrez l'app dans **Chrome**
+2. Un prompt d'installation apparaîtra automatiquement
+3. Ou : Menu → **Installer l'application**
+4. Confirmez
+
+### Desktop (Chrome, Edge)
+
+1. Un prompt d'installation apparaîtra
+2. Ou : Icône **+** dans la barre d'adresse
+3. Confirmez
+
+## 💡 Comment ça marche ?
+
+L'application utilise l'API gratuite de **Hugging Face** avec le modèle **Stable Diffusion XL**. Aucune clé API n'est nécessaire côté utilisateur.
+
+### Génération d'images :
+1. Entrez une description
+2. Choisissez le format
+3. Cliquez sur "Générer gratuitement"
+4. Attendez quelques secondes
+5. ✅ Image affichée !
+
+## 🔒 Sécurité & Confidentialité
+
+- ✅ Toutes vos données sont stockées **localement**
+- ✅ Aucune collecte de données personnelles
+- ✅ Aucun tracking, aucune analytics
+- ✅ Communication directe avec Hugging Face uniquement
+- ✅ Code open source, vérifiable
+
+## 🐛 Dépannage
+
+### L'app ne génère pas d'images
+
+1. Vérifiez votre connexion internet
+2. Réessayez (l'API peut être surchargée)
+3. Simplifiez votre prompt
+4. Actualisez la page
+
+### L'app ne s'installe pas
+
+1. Utilisez Chrome, Edge, ou Safari
+2. Accédez à l'app en HTTPS
+3. Videz le cache et rechargez
+
+### Les images ne se téléchargent pas
+
+1. Vérifiez les autorisations de téléchargement
+2. Essayez un autre navigateur
+3. Vérifiez l'espace de stockage
+
+## 📝 Notes importantes
+
+- **Temps de génération** : 5-15 secondes selon la charge serveur
+- **Qualité** : Bonne qualité, modèle Stable Diffusion XL
+- **Limite** : Aucune limite ! Générez autant que vous voulez
+- **Prompts** : En anglais ou en français (anglais = meilleurs résultats)
+- **Stockage** : Images stockées dans le navigateur (~5-10MB limite)
+
+## 🔄 Mises à jour
+
+Pour mettre à jour l'application :
+
+1. Remplacez les fichiers par les nouvelles versions
+2. Videz le cache du navigateur
+3. Le Service Worker se mettra à jour automatiquement
+
+## ⚠️ Limitations
+
+- Nécessite une connexion internet pour générer
+- Temps de génération variable selon charge serveur
+- Qualité inférieure à DALL-E 3 mais gratuite
+- Stockage limité par le navigateur
+- Pas de génération d'images NSFW
+
+## 📄 Licence
+
+Ce projet est libre d'utilisation, de modification et de distribution.
+
+## 🤝 Support
+
+Pour toute question :
+1. Vérifiez ce README
+2. Consultez la section "À propos" dans l'app
+3. Testez sur un autre navigateur
+
+## 🎯 Roadmap futures possibles
+
+- [ ] Plus de modèles d'IA
+- [ ] Édition d'images
+- [ ] Collections et tags
+- [ ] Export en différents formats
+- [ ] Partage d'images
+- [ ] Mode collaboratif
+
+---
+
+**Développé avec ❤️ pour rendre l'IA accessible à tous**
+
+*ImageAI v1.0.0 - 100% Gratuit*

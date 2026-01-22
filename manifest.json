@@ -1,11 +1,11 @@
 {
-  "name": "ImageAI - Générateur DALL-E 3",
+  "name": "ImageAI - Générateur d'images IA gratuit",
   "short_name": "ImageAI",
-  "description": "Générez des images incroyables avec l'intelligence artificielle DALL-E 3",
+  "description": "Générez des images gratuitement avec l'intelligence artificielle",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0A0E27",
-  "theme_color": "#0A0E27",
+  "background_color": "#111827",
+  "theme_color": "#111827",
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "fr",
@@ -25,19 +25,11 @@
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
-    {
-      "src": "screenshot1.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
   "shortcuts": [
     {
       "name": "Générer une image",
       "short_name": "Générer",
-      "description": "Créer une nouvelle image avec DALL-E 3",
+      "description": "Créer une nouvelle image gratuitement",
       "url": "/?action=generate",
       "icons": [
         {
@@ -58,14 +50,5 @@
         }
       ]
     }
-  ],
-  "share_target": {
-    "action": "/share",
-    "method": "GET",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
-    }
-  }
+  ]
 }

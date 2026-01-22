@@ -5,34 +5,35 @@
 
 /* === CSS VARIABLES === */
 :root {
-    /* Colors - Dark Mode with Vibrant Accents */
-    --bg-primary: #0A0E27;
-    --bg-secondary: #141829;
-    --bg-tertiary: #1E2139;
-    --bg-card: rgba(30, 33, 57, 0.6);
-    --bg-card-hover: rgba(30, 33, 57, 0.8);
+    /* Colors - Professional Dark Theme */
+    --bg-primary: #111827;
+    --bg-secondary: #1F2937;
+    --bg-tertiary: #374151;
+    --bg-card: #1F2937;
+    --bg-card-hover: #374151;
     
-    /* Gradient Colors */
-    --gradient-primary: linear-gradient(135deg, #FF6B9D 0%, #C65BCF 50%, #6366F1 100%);
-    --gradient-secondary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-    --gradient-accent: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+    /* Solid Colors - No Gradients */
+    --color-primary: #2563EB;
+    --color-primary-dark: #1D4ED8;
+    --color-primary-light: #3B82F6;
+    --color-accent: #10B981;
+    --color-accent-dark: #059669;
     
     /* Text Colors */
-    --text-primary: #F8FAFC;
-    --text-secondary: #94A3B8;
-    --text-tertiary: #64748B;
+    --text-primary: #F9FAFB;
+    --text-secondary: #D1D5DB;
+    --text-tertiary: #9CA3AF;
     
     /* Accent Colors */
-    --accent-pink: #FF6B9D;
-    --accent-purple: #C65BCF;
-    --accent-blue: #6366F1;
+    --accent-blue: #2563EB;
+    --accent-green: #10B981;
     --accent-orange: #F59E0B;
     
     /* Status Colors */
     --success: #10B981;
     --error: #EF4444;
     --warning: #F59E0B;
-    --info: #3B82F6;
+    --info: #2563EB;
     
     /* Spacing */
     --spacing-xs: 0.25rem;
@@ -42,27 +43,26 @@
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
     
-    /* Border Radius */
-    --radius-sm: 0.5rem;
-    --radius-md: 1rem;
-    --radius-lg: 1.5rem;
-    --radius-xl: 2rem;
+    /* Border Radius - More subtle */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
     --radius-full: 9999px;
     
-    /* Shadows */
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
-    --shadow-glow: 0 0 24px rgba(255, 107, 157, 0.3);
+    /* Shadows - Subtle and professional */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     
     /* Transitions */
-    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.2s ease;
+    --transition-slow: 0.3s ease;
     
-    /* Typography */
-    --font-display: 'Playfair Display', serif;
-    --font-body: 'Outfit', sans-serif;
+    /* Typography - Professional fonts */
+    --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     
     /* Layout */
     --header-height: 60px;
@@ -91,9 +91,11 @@ body {
     overflow-x: hidden;
     min-height: 100vh;
     position: relative;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Background Pattern */
+/* Subtle background pattern - minimal */
 body::before {
     content: '';
     position: fixed;
@@ -101,9 +103,8 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(circle at 20% 20%, rgba(255, 107, 157, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.02) 1px, transparent 0);
+    background-size: 40px 40px;
     pointer-events: none;
     z-index: -1;
 }
@@ -136,14 +137,12 @@ body::before {
 
 .splash-title {
     font-family: var(--font-display);
-    font-size: 2.5rem;
-    font-weight: 900;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
     margin: var(--spacing-lg) 0 var(--spacing-sm);
     animation: fadeInUp 0.8s ease-out 0.2s both;
+    letter-spacing: -0.02em;
 }
 
 .splash-subtitle {
@@ -157,7 +156,7 @@ body::before {
     height: 40px;
     margin: var(--spacing-xl) auto 0;
     border: 3px solid var(--bg-tertiary);
-    border-top-color: var(--accent-pink);
+    border-top-color: var(--color-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite, fadeInUp 0.8s ease-out 0.6s both;
 }
@@ -179,10 +178,10 @@ body::before {
     right: 0;
     height: var(--header-height);
     padding-top: var(--safe-area-top);
-    background: rgba(10, 14, 39, 0.9);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-secondary);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     z-index: 100;
 }
 
@@ -208,12 +207,10 @@ body::before {
 
 .app-title {
     font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 700;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    letter-spacing: -0.01em;
 }
 
 .icon-btn {
@@ -274,7 +271,7 @@ body::before {
     border-radius: var(--radius-lg);
     overflow: hidden;
     margin-bottom: var(--spacing-xl);
-    border: 2px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .preview-placeholder {
@@ -330,12 +327,12 @@ body::before {
 .preview-btn {
     flex: 1;
     padding: var(--spacing-md) var(--spacing-lg);
-    background: var(--gradient-primary);
+    background: var(--color-primary);
     color: white;
     border: none;
     border-radius: var(--radius-md);
     font-family: var(--font-body);
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -343,6 +340,10 @@ body::before {
     gap: var(--spacing-sm);
     cursor: pointer;
     transition: all var(--transition-base);
+}
+
+.preview-btn:hover {
+    background: var(--color-primary-dark);
 }
 
 .preview-btn:active {
@@ -367,7 +368,7 @@ body::before {
     width: 60px;
     height: 60px;
     border: 4px solid var(--bg-tertiary);
-    border-top-color: var(--accent-pink);
+    border-top-color: var(--color-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -405,11 +406,11 @@ body::before {
     width: 100%;
     padding: var(--spacing-md);
     background: var(--bg-card);
-    border: 2px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     color: var(--text-primary);
     font-family: var(--font-body);
-    font-size: 1rem;
+    font-size: 0.9375rem;
     resize: vertical;
     min-height: 100px;
     transition: all var(--transition-base);
@@ -417,8 +418,8 @@ body::before {
 
 .prompt-input:focus {
     outline: none;
-    border-color: var(--accent-pink);
-    box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .prompt-input::placeholder {
@@ -451,7 +452,7 @@ body::before {
     gap: var(--spacing-xs);
     padding: var(--spacing-md);
     background: var(--bg-card);
-    border: 2px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: all var(--transition-base);
@@ -461,9 +462,13 @@ body::before {
     transform: scale(0.98);
 }
 
+.size-option:hover {
+    border-color: var(--color-primary);
+}
+
 .size-option.active {
-    background: var(--gradient-primary);
-    border-color: transparent;
+    background: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 .size-option span {
@@ -508,20 +513,23 @@ body::before {
 .generate-btn {
     width: 100%;
     padding: var(--spacing-lg);
-    background: var(--gradient-primary);
+    background: var(--color-primary);
     color: white;
     border: none;
     border-radius: var(--radius-md);
     font-family: var(--font-body);
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--spacing-sm);
     cursor: pointer;
     transition: all var(--transition-base);
-    box-shadow: var(--shadow-glow);
+}
+
+.generate-btn:hover {
+    background: var(--color-primary-dark);
 }
 
 .generate-btn:active {
@@ -541,10 +549,12 @@ body::before {
 .cost-estimate {
     text-align: center;
     color: var(--text-secondary);
+    font-size: 0.875rem;
 }
 
 .cost-estimate strong {
-    color: var(--accent-pink);
+    color: var(--color-accent);
+    font-weight: 600;
 }
 
 /* === HISTORY SCREEN === */
@@ -563,8 +573,10 @@ body::before {
 
 .section-title {
     font-family: var(--font-display);
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
 }
 
 .clear-history-btn {
@@ -609,10 +621,7 @@ body::before {
 .stat-number {
     font-size: 1.75rem;
     font-weight: 700;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--color-primary);
     margin-bottom: var(--spacing-xs);
 }
 
@@ -647,11 +656,15 @@ body::before {
     overflow: hidden;
     cursor: pointer;
     transition: all var(--transition-base);
-    border: 2px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .history-item:active {
     transform: scale(0.98);
+}
+
+.history-item:hover {
+    border-color: var(--color-primary);
 }
 
 .history-item img {
@@ -733,7 +746,7 @@ body::before {
 .settings-subtitle svg {
     width: 20px;
     height: 20px;
-    color: var(--accent-pink);
+    color: var(--color-primary);
 }
 
 .settings-description {
@@ -754,18 +767,18 @@ body::before {
     padding: var(--spacing-md);
     padding-right: 50px;
     background: var(--bg-card);
-    border: 2px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     color: var(--text-primary);
     font-family: var(--font-body);
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
     transition: all var(--transition-base);
 }
 
 .api-key-input:focus {
     outline: none;
-    border-color: var(--accent-pink);
-    box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .toggle-visibility-btn {
@@ -818,10 +831,10 @@ body::before {
     padding: var(--spacing-md) var(--spacing-lg);
     background: var(--bg-card);
     color: var(--text-primary);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     font-family: var(--font-body);
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -831,9 +844,13 @@ body::before {
     transition: all var(--transition-base);
 }
 
+.secondary-btn:hover {
+    border-color: var(--color-primary);
+    background: var(--bg-tertiary);
+}
+
 .secondary-btn:active {
     transform: scale(0.98);
-    background: var(--bg-card-hover);
 }
 
 .secondary-btn svg {
@@ -930,13 +947,11 @@ body::before {
 
 .about-title {
     font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 900;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-primary);
     margin-bottom: var(--spacing-xs);
+    letter-spacing: -0.02em;
 }
 
 .about-version {
@@ -988,11 +1003,18 @@ body::before {
     gap: var(--spacing-sm);
     padding: var(--spacing-md) var(--spacing-lg);
     background: var(--bg-card);
-    color: var(--accent-blue);
+    color: var(--color-primary);
     text-decoration: none;
     border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     font-weight: 600;
+    font-size: 0.875rem;
     transition: all var(--transition-base);
+}
+
+.about-link:hover {
+    border-color: var(--color-primary);
+    background: var(--bg-tertiary);
 }
 
 .about-link:active {
@@ -1020,10 +1042,10 @@ body::before {
     right: 0;
     height: var(--bottom-nav-height);
     padding-bottom: var(--safe-area-bottom);
-    background: rgba(10, 14, 39, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-secondary);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -1053,17 +1075,17 @@ body::before {
     transform: translateX(-50%);
     width: 0;
     height: 3px;
-    background: var(--gradient-primary);
+    background: var(--color-primary);
     border-radius: 0 0 var(--radius-sm) var(--radius-sm);
     transition: width var(--transition-base);
 }
 
 .nav-item.active::before {
-    width: 60%;
+    width: 50%;
 }
 
 .nav-item.active {
-    color: var(--text-primary);
+    color: var(--color-primary);
 }
 
 .nav-icon {
@@ -1139,9 +1161,9 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(10, 14, 39, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(17, 24, 39, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     animation: fadeIn 0.3s ease-out;
 }
 
@@ -1159,9 +1181,9 @@ body::before {
     right: var(--spacing-lg);
     width: 44px;
     height: 44px;
-    background: rgba(10, 14, 39, 0.8);
+    background: var(--bg-secondary);
     color: white;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-full);
     display: flex;
     align-items: center;
@@ -1169,6 +1191,10 @@ body::before {
     cursor: pointer;
     z-index: 10;
     transition: all var(--transition-base);
+}
+
+.modal-close:hover {
+    background: var(--bg-tertiary);
 }
 
 .modal-close:active {
@@ -1210,10 +1236,10 @@ body::before {
     padding: var(--spacing-md) var(--spacing-lg);
     background: var(--bg-card);
     color: var(--text-primary);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     font-family: var(--font-body);
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -1221,6 +1247,10 @@ body::before {
     gap: var(--spacing-sm);
     cursor: pointer;
     transition: all var(--transition-base);
+}
+
+.modal-btn:hover {
+    background: var(--bg-tertiary);
 }
 
 .modal-btn:active {
@@ -1317,5 +1347,111 @@ body::before {
         user-select: none;
         -webkit-user-select: none;
         -webkit-touch-callout: none;
+    }
+}
+
+/* === PWA INSTALL PROMPT === */
+.install-prompt {
+    position: fixed;
+    bottom: calc(var(--bottom-nav-height) + var(--spacing-md));
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    background: var(--bg-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 200;
+    animation: slideInUp 0.3s ease-out;
+}
+
+.install-prompt-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.install-prompt-icon svg {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+}
+
+.install-prompt-text {
+    flex: 1;
+}
+
+.install-prompt-text strong {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.install-prompt-text p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.install-prompt-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.install-btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+
+.install-btn:hover {
+    background: var(--color-primary-dark);
+}
+
+.install-btn:active {
+    transform: scale(0.98);
+}
+
+.dismiss-btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.dismiss-btn:hover {
+    color: var(--text-primary);
+}
+
+.dismiss-btn:active {
+    transform: scale(0.98);
+}
+
+@media (min-width: 640px) {
+    .install-prompt {
+        max-width: 400px;
+        left: auto;
+        right: var(--spacing-lg);
+    }
+    
+    .install-prompt-buttons {
+        flex-direction: row;
     }
 }
