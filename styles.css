@@ -199,10 +199,16 @@ body::before {
     gap: var(--spacing-md);
 }
 
-.logo-mini svg {
+.logo-mini{
     width: 32px;
     height: 32px;
     border-radius: var(--radius-sm);
+}
+
+.logo-mini img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .app-title {
@@ -266,6 +272,7 @@ body::before {
 .preview-area {
     position: relative;
     width: 100%;
+    height: 400px;
     aspect-ratio: 1;
     background: var(--bg-card);
     border-radius: var(--radius-lg);
@@ -474,6 +481,7 @@ body::before {
 .size-option span {
     font-size: 0.85rem;
     font-weight: 600;
+    color: white;
 }
 
 .size-option small {
@@ -939,7 +947,7 @@ body::before {
     text-align: center;
 }
 
-.about-logo svg {
+.about-logo img {
     width: 100px;
     height: 100px;
     margin: 0 auto var(--spacing-lg);
