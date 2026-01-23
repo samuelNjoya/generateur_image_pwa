@@ -49,11 +49,32 @@ function initApp() {
 }
 
 // === SERVICE WORKER ===
+// function registerServiceWorker() {
+//     if ('serviceWorker' in navigator) {
+//         navigator.serviceWorker.register('sw.js')
+//             .then(reg => console.log('Service Worker registered'))
+//             .catch(err => console.error('SW error:', err));
+//     }
+// }
+
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Service Worker registered'))
-            .catch(err => console.error('SW error:', err));
+        navigator.serviceWorker.register('sw.js').then(reg => {
+            // Surveille les mises à jour
+            reg.onupdatefound = () => {
+                const installingWorker = reg.installing;
+                installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed') {
+                        if (navigator.serviceWorker.controller) {
+                            // Une nouvelle version a été trouvée et installée !
+                            showToast("Mise à jour disponible ! Rechargez la page.", "info");
+                            // Optionnel : Forcer le rechargement après 2 secondes
+                            // setTimeout(() => { window.location.reload(); }, 2000);
+                        }
+                    }
+                };
+            };
+        });
     }
 }
 

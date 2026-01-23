@@ -122,3 +122,5 @@ APIs gratuites à combiner :
 4. Prodia
 
 Ton code actuel fonctionne bien avec Pollinations. Veux-tu que je t'aide à modifier la logique de stockage pour passer du localStorage à IndexedDB afin de pouvoir sauvegarder des centaines d'images sans bug ?
+
+toujours ouvrir avec une fenettre privé si ça ne donne pas (le cache persistant du Service Worker.)

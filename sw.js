@@ -18,7 +18,8 @@ const ASSETS_TO_CACHE = [
 // Install event - cache assets
 self.addEventListener('install', (event) => {
     console.log('[SW] Install');
-    
+    self.skipWaiting(); 
+
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
@@ -36,7 +37,7 @@ self.addEventListener('install', (event) => {
 // Activate event - clean old caches
 self.addEventListener('activate', (event) => {
     console.log('[SW] Activate');
-    
+    event.waitUntil(clients.claim());
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
