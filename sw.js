@@ -1,9 +1,11 @@
 // ============================================
-// IMAGEAI - SERVICE WORKER
-// PWA Offline Support
+// IMAGEAI - SERVICE WORKER (CORRIGÉ)
+// PWA Offline Support & Update Management
 // ============================================
 
-const CACHE_NAME = 'imageai-v1.0.0';
+// 1. Incrémente cette version (ex: v1.0.1) chaque fois que tu changes ton CSS ou JS
+const CACHE_NAME = 'imageai-v1.0.0'; 
+
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
@@ -15,57 +17,57 @@ const ASSETS_TO_CACHE = [
     '/icon-512.png'
 ];
 
-// Install event - cache assets
+// INSTALLATION : Mise en cache initiale
 self.addEventListener('install', (event) => {
-    console.log('[SW] Install');
+    console.log('[SW] Installation en cours...');
+    
+    // Force le nouveau SW à s'installer sans attendre que l'ancien se ferme
     self.skipWaiting(); 
 
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('[SW] Caching app shell');
+                console.log('[SW] Mise en cache du "App Shell"');
                 return cache.addAll(ASSETS_TO_CACHE);
             })
-            .catch((error) => {
-                console.error('[SW] Cache failed:', error);
-            })
     );
-    
-    self.skipWaiting();
 });
 
-// Activate event - clean old caches
+// ACTIVATION : Nettoyage et prise de contrôle
 self.addEventListener('activate', (event) => {
-    console.log('[SW] Activate');
-    event.waitUntil(clients.claim());
-    event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log('[SW] Deleting old cache:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
-    );
+    console.log('[SW] Activation et nettoyage des vieux caches...');
     
-    self.clients.claim();
+    event.waitUntil(
+        Promise.all([
+            // Supprime les anciennes versions du cache
+            caches.keys().then((cacheNames) => {
+                return Promise.all(
+                    cacheNames.map((cacheName) => {
+                        if (cacheName !== CACHE_NAME) {
+                            console.log('[SW] Suppression du vieux cache:', cacheName);
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            }),
+            // Permet au SW de contrôler la page immédiatement sans rechargement
+            self.clients.claim()
+        ])
+    );
 });
 
-// Fetch event - serve from cache, fallback to network
+// FETCH : Stratégie de réseau
 self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
 
-    // Skip ALL external API requests - let them pass through normally
+    // ERREUR CORRIGÉE : Si c'est une requête vers l'API d'image (externe), 
+    // on laisse passer SANS intercepter ni mettre en cache ici (pour éviter les bugs CORS)
     if (url.origin !== location.origin) {
-        // Don't intercept external requests at all
-        return;
+        return; 
     }
 
-    // Cache-first strategy for app assets only
+    // Stratégie "Cache First" pour les fichiers locaux (index, css, js)
     event.respondWith(
         caches.match(request)
             .then((cachedResponse) => {
@@ -73,66 +75,31 @@ self.addEventListener('fetch', (event) => {
                     return cachedResponse;
                 }
 
-                return fetch(request)
-                    .then((response) => {
-                        // Don't cache non-successful responses
-                        if (!response || response.status !== 200 || response.type === 'error') {
-                            return response;
-                        }
-
-                        // Clone the response
-                        const responseToCache = response.clone();
-
-                        // Cache the fetched resource
-                        caches.open(CACHE_NAME)
-                            .then((cache) => {
-                                cache.put(request, responseToCache);
-                            });
-
+                return fetch(request).then((response) => {
+                    // On ne cache que les réponses valides
+                    if (!response || response.status !== 200 || response.type !== 'basic') {
                         return response;
-                    })
-                    .catch((error) => {
-                        console.error('[SW] Fetch failed:', error);
-                        
-                        // Return offline page if available
-                        if (request.destination === 'document') {
-                            return caches.match('/index.html');
-                        }
+                    }
+
+                    const responseToCache = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(request, responseToCache);
                     });
+
+                    return response;
+                }).catch(() => {
+                    // Si on est hors-ligne et que le fichier n'est pas en cache
+                    if (request.destination === 'document') {
+                        return caches.match('/index.html');
+                    }
+                });
             })
     );
 });
 
-// Message event - handle messages from clients
+// GESTION DES MESSAGES (Pour forcer la mise à jour depuis app.js)
 self.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
     }
-});
-
-// Push notification (future feature)
-self.addEventListener('push', (event) => {
-    const options = {
-        body: event.data ? event.data.text() : 'Nouvelle notification',
-        icon: '/icon-192.png',
-        badge: '/icon-192.png',
-        vibrate: [200, 100, 200],
-        data: {
-            dateOfArrival: Date.now(),
-            primaryKey: 1
-        }
-    };
-
-    event.waitUntil(
-        self.registration.showNotification('ImageAI', options)
-    );
-});
-
-// Notification click
-self.addEventListener('notificationclick', (event) => {
-    event.notification.close();
-
-    event.waitUntil(
-        clients.openWindow('/')
-    );
 });
