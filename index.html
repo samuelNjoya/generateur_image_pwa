@@ -8,9 +8,9 @@
     <meta name="description" content="Générez des images gratuitement avec l'IA">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ImageAI">
+    <meta name="apple-mobile-web-app-title" content="SmartImageAI">
 
-    <title>ImageAI - Générateur d'images IA gratuit</title>
+    <title>SmartImageAI - Générateur d'images IA gratuit</title>
 
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -37,7 +37,7 @@
                         <circle cx="100" cy="100" r="20" fill="#10B981" />
                     </svg>
                 </div>
-                <h1 class="splash-title">ImageAI</h1>
+                <h1 class="splash-title">SmartImageAI</h1>
                 <p class="splash-subtitle">Génération gratuite par IA</p>
                 <div class="splash-loader"></div>
             </div>
@@ -127,6 +127,16 @@
                                     <span>Portrait</span>
                                 </button>
                             </div>
+                        </div>
+
+                        <div class="model-selector">
+                            <label class="input-label">Style / Modèle IA</label>
+                            <select id="model-select" class="model-select">
+                                <option value="flux" selected>✨ Flux.1 (Recommandé)</option>
+                                <option value="flux-realism">📸 Photo Réaliste</option>
+                                <option value="any-v4-5">🎨 Style Anime / Manga</option>
+                                <option value="turbo">⚡ Rapide (Turbo)</option>
+                            </select>
                         </div>
 
                         <button class="generate-btn" id="generate-btn">
@@ -246,13 +256,14 @@
                         <img src="logo.png" alt="">
                     </div>
 
-                    <h1 class="about-title">ImageAI</h1>
+                    <h1 class="about-title">SmartImageAI</h1>
                     <p class="about-version">Version 1.0.0</p>
 
                     <div class="about-content">
                         <div class="about-section">
                             <h3>À propos</h3>
-                            <p>ImageAI est une application web progressive (PWA) gratuite qui vous permet de générer des
+                            <p>SmartImageAI est une application web progressive (PWA) gratuite qui vous permet de
+                                générer des
                                 images exceptionnelles grâce à l'intelligence artificielle.</p>
                         </div>
 
@@ -368,7 +379,7 @@
                     </svg>
                 </div>
                 <div class="install-prompt-text">
-                    <strong>Installer ImageAI</strong>
+                    <strong>Installer SmartImageAI</strong>
                     <p>Accédez rapidement à l'app depuis votre écran d'accueil</p>
                 </div>
                 <div class="install-prompt-buttons">

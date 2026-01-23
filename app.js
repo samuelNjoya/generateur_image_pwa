@@ -8,7 +8,8 @@ const AppState = {
     currentScreen: 'generator',
     history: [],
     selectedSize: 'square',
-    isGenerating: false
+    isGenerating: false,
+    selectedModel: 'flux', // <--- AJOUTE CETTE LIGNE
 };
 
 // === CONSTANTS ===
@@ -24,11 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initApp() {
-    // Hide splash screen after 2.5s
+    // Hide splash screen after 3.0s
     setTimeout(() => {
         const splash = document.getElementById('splash-screen');
         if (splash) splash.style.display = 'none';
-    }, 2500);
+    }, 3000);
 
     // Load saved data
     loadHistory();
@@ -168,6 +169,13 @@ function setupEventListeners() {
         }
     });
 
+    // Gestion du sélecteur de modèle
+    const modelSelect = document.getElementById('model-select');
+    modelSelect?.addEventListener('change', (e) => {
+        AppState.selectedModel = e.target.value;
+        saveSettings(); // On sauvegarde ce choix
+    });
+
     // History
     const clearHistoryBtn = document.getElementById('clear-history-btn');
     clearHistoryBtn?.addEventListener('click', handleClearHistory);
@@ -293,30 +301,70 @@ async function handleGenerate() {
 }
 
 //====Appel l'API====      
+// async function generateImageWithPollinations(prompt, size) {
+//     const generateBtn = document.getElementById('generate-btn');
+//     generateBtn.disabled = true;
+
+//     try {
+//         // Encode prompt for URL
+//         const encodedPrompt = encodeURIComponent(prompt);
+
+//         // Determine dimensions based on size
+//         let width = 1024;
+//         let height = 1024;
+
+//         if (size === 'landscape') {
+//             width = 1792;
+//             height = 1024;
+//         } else if (size === 'portrait') {
+//             width = 1024;
+//             height = 1792;
+//         }
+
+//         // Pollinations.ai URL format //enhance=true meilleur qualité  // nologo=true pas de watermark
+//         const imageUrl = `${POLLINATIONS_API}${encodedPrompt}?width=${width}&height=${height}&nologo=true&enhance=true`;
+
+//         // Preload image to ensure it's generated attends que l'image soit charger
+//         await new Promise((resolve, reject) => {
+//             const img = new Image();
+//             img.onload = () => resolve();
+//             img.onerror = () => reject(new Error('Failed to load image'));
+//             img.src = imageUrl;
+//         });
+
+//         return imageUrl;
+//     } catch (error) {
+//         console.error('API Error:', error);
+//         throw error;
+//     } finally {
+//         generateBtn.disabled = false;
+//     }
+// }
+
 async function generateImageWithPollinations(prompt, size) {
     const generateBtn = document.getElementById('generate-btn');
     generateBtn.disabled = true;
 
     try {
-        // Encode prompt for URL
-        const encodedPrompt = encodeURIComponent(prompt);
-
-        // Determine dimensions based on size
-        let width = 1024;
-        let height = 1024;
-
-        if (size === 'landscape') {
-            width = 1792;
-            height = 1024;
-        } else if (size === 'portrait') {
-            width = 1024;
-            height = 1792;
+        // --- ASTUCE RÉALISME ---
+        // Si l'utilisateur choisit 'flux-realism', on enrichit son prompt en douce
+        let finalPrompt = prompt;
+        if (AppState.selectedModel === 'flux-realism') {
+            finalPrompt += ", photo, highly detailed, 8k resolution, raw photography, masterpiece";
         }
 
-        // Pollinations.ai URL format //enhance=true meilleur qualité  // nologo=true pas de watermark
-        const imageUrl = `${POLLINATIONS_API}${encodedPrompt}?width=${width}&height=${height}&nologo=true&enhance=true`;
+        const encodedPrompt = encodeURIComponent(finalPrompt);
 
-        // Preload image to ensure it's generated attends que l'image soit charger
+        // Déterminer les dimensions
+        let width = 1024;
+        let height = 1024;
+        if (size === 'landscape') { width = 1792; height = 1024; }
+        else if (size === 'portrait') { width = 1024; height = 1792; }
+
+        // --- NOUVELLE URL DYNAMIQUE ---
+        // On injecte &model=${AppState.selectedModel}
+        const imageUrl = `${POLLINATIONS_API}${encodedPrompt}?width=${width}&height=${height}&model=${AppState.selectedModel}&nologo=true&enhance=true&seed=${Math.floor(Math.random() * 100000)}`;
+        // Attente du chargement de l'image
         await new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = () => resolve();
@@ -573,6 +621,11 @@ function loadSettings() {
         try {
             const settings = JSON.parse(savedSettings);
             AppState.selectedSize = settings.selectedSize || 'square';
+            AppState.selectedModel = settings.selectedModel || 'flux'; // pour garder le choix du model
+
+            // Mettre à jour le menu déroulant HTML pour qu'il affiche le bon modèle au démarrage
+            const modelSelect = document.getElementById('model-select');
+            if(modelSelect) modelSelect.value = AppState.selectedModel;
         } catch (error) {
             console.error('Erreur chargement paramètres:', error);
         }
@@ -581,7 +634,8 @@ function loadSettings() {
 
 function saveSettings() {
     const settings = {
-        selectedSize: AppState.selectedSize
+        selectedSize: AppState.selectedSize,
+        selectedModel: AppState.selectedModel // <-- AJOUT
     };
     localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
 }
