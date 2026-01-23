@@ -1,6 +1,6 @@
 {
-  "name": "ImageAI - Générateur d'images IA gratuit",
-  "short_name": "ImageAI",
+  "name": "SmartImageAI - Générateur d'images IA gratuit",
+  "short_name": "SmartImageAI",
   "description": "Générez des images gratuitement avec l'intelligence artificielle",
   "start_url": "/",
   "display": "standalone",

@@ -43,7 +43,7 @@ function initApp() {
 
     // Register service worker
     registerServiceWorker();
-    
+
     // Setup PWA install prompt
     setupPWAInstall();
 }
@@ -64,7 +64,7 @@ function setupPWAInstall() {
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        
+
         // Show install prompt after 10 seconds if not in standalone mode
         if (!window.matchMedia('(display-mode: standalone)').matches) {
             setTimeout(showInstallPrompt, 10000);
@@ -130,6 +130,23 @@ function setupEventListeners() {
         if (img.src) downloadImage(img.src, 'imageai-' + Date.now() + '.png');
     });
 
+    // Partage depuis le générateur
+    document.getElementById('preview-share-btn')?.addEventListener('click', () => {
+        const img = document.getElementById('preview-image');
+        if (img.src) {
+            shareImage(img.src, 'Ma création ImageAI', 'Regarde ce que j\'ai généré !');
+        }
+    });
+
+    // Partage depuis la modal (historique)
+    document.getElementById('modal-share-btn')?.addEventListener('click', () => {
+        if (!currentModalImageId) return;
+        const item = AppState.history.find(h => h.id === currentModalImageId);
+        if (item) {
+            shareImage(item.imageUrl, 'Image de ma galerie', item.prompt);
+        }
+    });
+
     // History
     const clearHistoryBtn = document.getElementById('clear-history-btn');
     clearHistoryBtn?.addEventListener('click', handleClearHistory);
@@ -149,11 +166,11 @@ function setupEventListeners() {
     modalOverlay?.addEventListener('click', closeModal);
     modalDownloadBtn?.addEventListener('click', handleModalDownload);
     modalDeleteBtn?.addEventListener('click', handleModalDelete);
-    
+
     // PWA Install
     const installBtn = document.getElementById('install-btn');
     const dismissInstallBtn = document.getElementById('dismiss-install-btn');
-    
+
     installBtn?.addEventListener('click', async () => {
         if (deferredPrompt) {
             deferredPrompt.prompt();
@@ -165,7 +182,7 @@ function setupEventListeners() {
             hideInstallPrompt();
         }
     });
-    
+
     dismissInstallBtn?.addEventListener('click', () => {
         hideInstallPrompt();
     });
@@ -177,7 +194,7 @@ function switchScreen(screenName) {
     screens.forEach(screen => {
         screen.classList.remove('active');
     });
-    
+
     const targetScreen = document.getElementById(`screen-${screenName}`);
     if (targetScreen) {
         targetScreen.classList.add('active');
@@ -197,7 +214,7 @@ function switchScreen(screenName) {
         'settings': 'Paramètres',
         'about': 'À propos'
     };
-    
+
     const pageTitle = document.getElementById('page-title');
     if (pageTitle) {
         pageTitle.textContent = pageTitles[screenName] || 'ImageAI';
@@ -225,7 +242,7 @@ async function handleGenerate() {
 
     try {
         const imageUrl = await generateImageWithPollinations(prompt, AppState.selectedSize);
-        
+
         // Save to history
         const historyItem = {
             id: Date.now(),
@@ -240,10 +257,10 @@ async function handleGenerate() {
 
         // Display image
         showPreviewImage(imageUrl);
-        
+
         // Update stats
         updateStats();
-        
+
         showToast('Image générée avec succès !', 'success');
     } catch (error) {
         console.error('Erreur génération:', error);
@@ -262,11 +279,11 @@ async function generateImageWithPollinations(prompt, size) {
     try {
         // Encode prompt for URL
         const encodedPrompt = encodeURIComponent(prompt);
-        
+
         // Determine dimensions based on size
         let width = 1024;
         let height = 1024;
-        
+
         if (size === 'landscape') {
             width = 1792;
             height = 1024;
@@ -274,10 +291,10 @@ async function generateImageWithPollinations(prompt, size) {
             width = 1024;
             height = 1792;
         }
-        
+
         // Pollinations.ai URL format //enhance=true meilleur qualité  // nologo=true pas de watermark
         const imageUrl = `${POLLINATIONS_API}${encodedPrompt}?width=${width}&height=${height}&nologo=true&enhance=true`;
-        
+
         // Preload image to ensure it's generated attends que l'image soit charger
         await new Promise((resolve, reject) => {
             const img = new Image();
@@ -285,7 +302,7 @@ async function generateImageWithPollinations(prompt, size) {
             img.onerror = () => reject(new Error('Failed to load image'));
             img.src = imageUrl;
         });
-        
+
         return imageUrl;
     } catch (error) {
         console.error('API Error:', error);
@@ -309,7 +326,7 @@ function showLoading() {
 function hideLoading() {
     const loading = document.getElementById('preview-loading');
     const placeholder = document.getElementById('preview-placeholder');
-    
+
     loading.style.display = 'none';
     placeholder.style.display = 'flex';
 }
@@ -464,6 +481,35 @@ async function downloadImage(url, filename) {
     }
 }
 
+async function shareImage(url, title, text) {
+    try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const file = new File([blob], 'imageai-creation.png', { type: blob.type });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            // Partage du fichier (Mobile récent)
+            await navigator.share({
+                files: [file],
+                title: title,
+                text: text
+            });
+        } else {
+            // Repli sur le partage de lien
+            await navigator.share({
+                title: title,
+                text: text,
+                url: url
+            });
+        }
+    } catch (err) {
+        if (err.name !== 'AbortError') {
+            console.error("Erreur de partage:", err);
+            showToast('Le partage a échoué', 'error');
+        }
+    }
+}
+
 // === SETTINGS ===
 function handleResetApp() {
     if (!confirm('Voulez-vous vraiment réinitialiser l\'application ? Toutes vos données seront supprimées.')) {
@@ -472,10 +518,10 @@ function handleResetApp() {
 
     localStorage.clear();
     AppState.history = [];
-    
+
     updateHistoryDisplay();
     updateStats();
-    
+
     showToast('Application réinitialisée', 'success');
 }
 
@@ -526,7 +572,7 @@ function showToast(message, type = 'info') {
 
     toast.textContent = message;
     toast.className = `toast ${type}`;
-    
+
     setTimeout(() => toast.classList.add('show'), 10);
 
     setTimeout(() => {

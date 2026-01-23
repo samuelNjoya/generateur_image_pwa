@@ -120,3 +120,5 @@ APIs gratuites à combiner :
 2. Stable Horde
 3. Craiyon
 4. Prodia
+
+Ton code actuel fonctionne bien avec Pollinations. Veux-tu que je t'aide à modifier la logique de stockage pour passer du localStorage à IndexedDB afin de pouvoir sauvegarder des centaines d'images sans bug ?

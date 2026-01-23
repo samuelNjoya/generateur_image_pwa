@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,31 +9,32 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ImageAI">
-    
+
     <title>ImageAI - Générateur d'images IA gratuit</title>
-    
+
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="apple-touch-icon" href="icon-512.png">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div id="app">
-        
+
         <!-- Splash Screen -->
         <div id="splash-screen" class="splash-screen">
             <div class="splash-content">
                 <div class="splash-logo">
                     <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="100" cy="100" r="80" fill="#2563EB" opacity="0.1"/>
-                        <circle cx="100" cy="100" r="60" fill="none" stroke="#2563EB" stroke-width="8"/>
-                        <circle cx="100" cy="100" r="20" fill="#10B981"/>
+                        <circle cx="100" cy="100" r="80" fill="#2563EB" opacity="0.1" />
+                        <circle cx="100" cy="100" r="60" fill="none" stroke="#2563EB" stroke-width="8" />
+                        <circle cx="100" cy="100" r="20" fill="#10B981" />
                     </svg>
                 </div>
                 <h1 class="splash-title">ImageAI</h1>
@@ -46,7 +48,7 @@
             <div class="header-content">
                 <div class="header-left">
                     <div class="logo-mini">
-                       <img src="logo.png" alt="">
+                        <img src="logo.png" alt="">
                     </div>
                     <h1 class="app-title" id="page-title">Générer</h1>
                 </div>
@@ -55,19 +57,21 @@
 
         <!-- Main Content -->
         <main id="main-content" class="main-content">
-            
+
             <!-- Screen 1: Generator -->
             <div id="screen-generator" class="screen active">
                 <div class="generator-container">
-                    
+
                     <!-- Preview Area -->
                     <div class="preview-area" id="preview-area">
                         <div class="preview-placeholder" id="preview-placeholder">
                             <div class="placeholder-icon">
                                 <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="20" y="30" width="80" height="60" rx="8" fill="none" stroke="#2563EB" stroke-width="3" opacity="0.3"/>
-                                    <circle cx="40" cy="50" r="8" fill="#2563EB" opacity="0.3"/>
-                                    <path d="M 30 75 L 50 60 L 70 70 L 90 55" stroke="#10B981" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                                    <rect x="20" y="30" width="80" height="60" rx="8" fill="none" stroke="#2563EB"
+                                        stroke-width="3" opacity="0.3" />
+                                    <circle cx="40" cy="50" r="8" fill="#2563EB" opacity="0.3" />
+                                    <path d="M 30 75 L 50 60 L 70 70 L 90 55" stroke="#10B981" stroke-width="3"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
                                 </svg>
                             </div>
                             <p class="placeholder-text">Votre image apparaîtra ici</p>
@@ -77,9 +81,15 @@
                             <div class="preview-actions">
                                 <button class="preview-btn download-btn" id="preview-download-btn">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
                                     </svg>
                                     Télécharger
+                                </button>
+                                <button class="preview-btn share-btn" id="preview-share-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" />
+                                    </svg>
+                                    Partager
                                 </button>
                             </div>
                         </div>
@@ -94,12 +104,8 @@
                     <div class="input-area">
                         <div class="input-group">
                             <label for="prompt-input" class="input-label">Décrivez votre image</label>
-                            <textarea 
-                                id="prompt-input" 
-                                class="prompt-input" 
-                                placeholder="Un chat astronaute explorant une galaxie colorée..."
-                                rows="3"
-                            ></textarea>
+                            <textarea id="prompt-input" class="prompt-input"
+                                placeholder="Un chat astronaute explorant une galaxie colorée..." rows="3"></textarea>
                             <div class="input-counter">
                                 <span id="char-count">0</span> / 1000
                             </div>
@@ -124,9 +130,11 @@
                         </div>
 
                         <button class="generate-btn" id="generate-btn">
-                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="3"/>
-                                <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4l4.2-4.2"/>
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="3" />
+                                <path
+                                    d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4l4.2-4.2" />
                             </svg>
                             <span class="btn-text">Générer gratuitement</span>
                         </button>
@@ -145,12 +153,13 @@
                         <h2 class="section-title">Historique</h2>
                         <button class="clear-history-btn" id="clear-history-btn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                <path
+                                    d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                             </svg>
                             Effacer tout
                         </button>
                     </div>
-                    
+
                     <div class="history-stats">
                         <div class="stat-card">
                             <div class="stat-number" id="total-images">0</div>
@@ -165,8 +174,10 @@
                     <div class="history-grid" id="history-grid">
                         <div class="empty-state">
                             <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="60" cy="60" r="40" fill="none" stroke="currentColor" stroke-width="2" opacity="0.3"/>
-                                <path d="M 40 60 L 50 70 L 70 50" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/>
+                                <circle cx="60" cy="60" r="40" fill="none" stroke="currentColor" stroke-width="2"
+                                    opacity="0.3" />
+                                <path d="M 40 60 L 50 70 L 70 50" stroke="currentColor" stroke-width="3" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round" opacity="0.3" />
                             </svg>
                             <p>Aucune image générée</p>
                             <small>Vos créations apparaîtront ici</small>
@@ -179,24 +190,25 @@
             <div id="screen-settings" class="screen">
                 <div class="settings-container">
                     <h2 class="section-title">Paramètres</h2>
-                    
+
                     <div class="settings-section">
                         <h3 class="settings-subtitle">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 1v6m0 6v6"/>
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 1v6m0 6v6" />
                             </svg>
                             Génération gratuite
                         </h3>
                         <p class="settings-description">
-                            Cette application utilise l'intelligence artificielle gratuite. Aucune inscription ni paiement nécessaire !
+                            Cette application utilise l'intelligence artificielle gratuite. Aucune inscription ni
+                            paiement nécessaire !
                         </p>
-                        
+
                         <div class="info-box">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="12" y1="16" x2="12" y2="12"/>
-                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="16" x2="12" y2="12" />
+                                <line x1="12" y1="8" x2="12.01" y2="8" />
                             </svg>
                             <div>
                                 <strong>100% Gratuit</strong>
@@ -208,17 +220,17 @@
                     <div class="settings-section">
                         <h3 class="settings-subtitle">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
                             </svg>
                             Données de l'application
                         </h3>
-                        
+
                         <button class="danger-btn" id="reset-app-btn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="1 4 1 10 7 10"/>
-                                <polyline points="23 20 23 14 17 14"/>
-                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                                <polyline points="1 4 1 10 7 10" />
+                                <polyline points="23 20 23 14 17 14" />
+                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
                             </svg>
                             Réinitialiser l'application
                         </button>
@@ -231,16 +243,17 @@
             <div id="screen-about" class="screen">
                 <div class="about-container">
                     <div class="about-logo">
-                         <img src="logo.png" alt="">
+                        <img src="logo.png" alt="">
                     </div>
-                    
+
                     <h1 class="about-title">ImageAI</h1>
                     <p class="about-version">Version 1.0.0</p>
-                    
+
                     <div class="about-content">
                         <div class="about-section">
                             <h3>À propos</h3>
-                            <p>ImageAI est une application web progressive (PWA) gratuite qui vous permet de générer des images exceptionnelles grâce à l'intelligence artificielle.</p>
+                            <p>ImageAI est une application web progressive (PWA) gratuite qui vous permet de générer des
+                                images exceptionnelles grâce à l'intelligence artificielle.</p>
                         </div>
 
                         <div class="about-section">
@@ -257,7 +270,8 @@
 
                         <div class="about-section">
                             <h3>Confidentialité</h3>
-                            <p>Toutes vos données sont stockées localement sur votre appareil. Aucune donnée personnelle n'est collectée.</p>
+                            <p>Toutes vos données sont stockées localement sur votre appareil. Aucune donnée personnelle
+                                n'est collectée.</p>
                         </div>
                     </div>
 
@@ -273,32 +287,34 @@
         <nav class="bottom-nav">
             <button class="nav-item active" data-screen="generator">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4l4.2-4.2"/>
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4l4.2-4.2" />
                 </svg>
                 <span class="nav-label">Générer</span>
             </button>
             <button class="nav-item" data-screen="history">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7"/>
-                    <rect x="14" y="3" width="7" height="7"/>
-                    <rect x="14" y="14" width="7" height="7"/>
-                    <rect x="3" y="14" width="7" height="7"/>
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
                 </svg>
                 <span class="nav-label">Historique</span>
             </button>
             <button class="nav-item" data-screen="settings">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
                 </svg>
                 <span class="nav-label">Paramètres</span>
             </button>
             <button class="nav-item" data-screen="about">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="16" x2="12" y2="12"/>
-                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
                 <span class="nav-label">À propos</span>
             </button>
@@ -313,8 +329,8 @@
             <div class="modal-content">
                 <button class="modal-close" id="modal-close">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
                     </svg>
                 </button>
                 <img id="modal-image" alt="Image en plein écran" />
@@ -323,13 +339,17 @@
                     <div class="modal-actions">
                         <button class="modal-btn" id="modal-download-btn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
                             </svg>
                             Télécharger
                         </button>
+                        <button class="modal-btn" id="modal-share-btn">
+                            Partager
+                        </button>
                         <button class="modal-btn danger" id="modal-delete-btn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                <path
+                                    d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                             </svg>
                             Supprimer
                         </button>
@@ -343,8 +363,8 @@
             <div class="install-prompt-content">
                 <div class="install-prompt-icon">
                     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                        <circle cx="20" cy="20" r="8" fill="#10B981"/>
+                        <circle cx="20" cy="20" r="18" fill="#2563EB" />
+                        <circle cx="20" cy="20" r="8" fill="#10B981" />
                     </svg>
                 </div>
                 <div class="install-prompt-text">
@@ -362,4 +382,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>
