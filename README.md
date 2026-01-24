@@ -128,3 +128,6 @@ toujours ouvrir avec une fenettre privé si ça ne donne pas (le cache persistan
 https://pollinations.ai/
 https://discord.com/channels/@me 
 je suis bon
+
+ajout de l'api pour la traduction en anglais 
+ const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=fr|en`);

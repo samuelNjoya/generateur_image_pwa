@@ -12,6 +12,21 @@ const AppState = {
     selectedModel: 'flux', // <--- AJOUTE CETTE LIGNE
 };
 
+const SURPRISE_PROMPTS = [
+    "Un astronaute faisant du skate sur les anneaux de Saturne, style cyberpunk",
+    "Un petit dragon endormi dans une tasse de café, style Pixar 3D",
+    "Portrait d'une guerrière viking avec des peintures de guerre, hyper-réaliste",
+    "Un chat samouraï en armure traditionnelle japonaise, style estampe",
+    "Une forêt enchantée avec des champignons géants lumineux et des fées",
+    "Une ville futuriste sous l'océan avec des dômes de verre et des poissons néons",
+    "Un vieux renard bibliothécaire portant des lunettes, style peinture à l'huile",
+    "Une île flottante avec une cascade tombant dans les nuages au coucher du soleil",
+    "Un robot géant rouillé dans un champ de fleurs sauvages, style Ghibli",
+    "Le portrait d'un lion fait entièrement de galaxies et de nébuleuses étoilées",
+    "Une villa moderne en verre suspendue à une falaise au-dessus de la mer",
+    "Un combat épique entre un guerrier de glace et un démon de feu, style manga"
+];
+
 // === CONSTANTS ===
 const POLLINATIONS_API = 'https://image.pollinations.ai/prompt/'; // API gratuite
 const STORAGE_KEYS = {
@@ -137,6 +152,9 @@ function setupEventListeners() {
         charCount.textContent = e.target.value.length;
     });
 
+    // pour les prompts aleatoires
+    document.getElementById('surprise-btn')?.addEventListener('click', handleSurprise);
+
     sizeOptions.forEach(option => {
         option.addEventListener('click', () => {
             sizeOptions.forEach(o => o.classList.remove('active'));
@@ -171,8 +189,19 @@ function setupEventListeners() {
 
     // Gestion du sélecteur de modèle
     const modelSelect = document.getElementById('model-select');
+    const modelInfo = document.getElementById('model-info'); // Ajoute un petit <span> ou <p> dans ton HTML
+
     modelSelect?.addEventListener('change', (e) => {
         AppState.selectedModel = e.target.value;
+        // Petite description dynamique
+        const desc = {
+            'flux': 'Le plus équilibré et précis.',
+            'flux-realism': 'Idéal pour les visages et paysages réels.',
+            'any-v4-5': 'Parfait pour les dessins et le style manga.',
+            'turbo': 'Moins précis mais génère en un éclair.'
+        };
+
+        if (modelInfo) modelInfo.textContent = desc[AppState.selectedModel];
         saveSettings(); // On sauvegarde ce choix
     });
 
@@ -252,30 +281,59 @@ function switchScreen(screenName) {
     AppState.currentScreen = screenName;
 }
 
+// traduction en anglais pour les bon prompt
+async function translateToEnglish(text) {
+    // Si le texte est très court ou vide, on ne traduit pas
+    if (!text || text.length < 3) return text;
+
+    try {
+        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=fr|en`);
+        const data = await response.json();
+
+        const translatedText = data.responseData.translatedText;
+
+        // Le fameux console.log pour inspecter la magie
+        console.log("================================");
+        console.log("🌐 TRADUCTION IMAGEAI");
+        console.log("🇫🇷 Original :", text);
+        console.log("🇺🇸 Traduit  :", translatedText);
+        console.log("================================");
+
+        return translatedText;
+    } catch (error) {
+        console.error("Erreur de traduction, utilisation du texte original:", error);
+        return text; // En cas d'erreur, on garde le texte de base
+    }
+}
+
 // === Lance la génération de l'image ===
 async function handleGenerate() {
     const promptInput = document.getElementById('prompt-input');
-    const prompt = promptInput.value.trim();
+    const originalPrompt = promptInput.value.trim(); // On garde l'original pour l'historique
 
-    if (!prompt) {
+    if (!originalPrompt) {
         showToast('Veuillez entrer une description', 'warning');
         return;
     }
 
-    if (AppState.isGenerating) {
-        return;
-    }
+    if (AppState.isGenerating) return;
 
     AppState.isGenerating = true;
     showLoading();
 
     try {
-        const imageUrl = await generateImageWithPollinations(prompt, AppState.selectedSize);
+        // --- ÉTAPE DE TRADUCTION ---
+        // On traduit le prompt avant de l'envoyer à l'IA
+        const translatedPrompt = await translateToEnglish(originalPrompt);
 
-        // Save to history
+        // On envoie le prompt TRADUIT à l'API de génération
+        const imageUrl = await generateImageWithPollinations(translatedPrompt, AppState.selectedSize);
+
+        // On sauvegarde dans l'historique avec le prompt original (en français) 
+        // pour que l'utilisateur s'y retrouve
         const historyItem = {
             id: Date.now(),
-            prompt: prompt,
+            prompt: originalPrompt,
             imageUrl: imageUrl,
             size: AppState.selectedSize,
             timestamp: new Date().toISOString()
@@ -283,21 +341,37 @@ async function handleGenerate() {
 
         AppState.history.unshift(historyItem);
         saveHistory();
-
-        // Display image
         showPreviewImage(imageUrl);
-
-        // Update stats
         updateStats();
-
         showToast('Image générée avec succès !', 'success');
+
     } catch (error) {
         console.error('Erreur génération:', error);
-        showToast('Erreur lors de la génération. Réessayez.', 'error');
+        showToast('Erreur lors de la génération.', 'error');
         hideLoading();
     } finally {
         AppState.isGenerating = false;
     }
+}
+
+//Prompt de generation suprise
+function handleSurprise() {
+    const promptInput = document.getElementById('prompt-input');
+    const charCount = document.getElementById('char-count');
+    
+    // 1. Choisir un prompt au hasard
+    const randomIndex = Math.floor(Math.random() * SURPRISE_PROMPTS.length);
+    const randomPrompt = SURPRISE_PROMPTS[randomIndex];
+
+    // 2. L'ajouter dans le champ avec un petit effet fluide
+    promptInput.value = randomPrompt;
+    
+    // 3. Mettre à jour le compteur de caractères
+    if(charCount) charCount.textContent = randomPrompt.length;
+
+    // 4. Petit effet visuel sur le champ
+    promptInput.classList.add('pulse-highlight');
+    setTimeout(() => promptInput.classList.remove('pulse-highlight'), 500);
 }
 
 //====Appel l'API====      
@@ -341,30 +415,42 @@ async function handleGenerate() {
 //     }
 // }
 
+// le model le plus performant reste turbo
 async function generateImageWithPollinations(prompt, size) {
     const generateBtn = document.getElementById('generate-btn');
     generateBtn.disabled = true;
 
     try {
-        // --- ASTUCE RÉALISME ---
-        // Si l'utilisateur choisit 'flux-realism', on enrichit son prompt en douce
+        // 1. On prépare une base de prompt robuste
         let finalPrompt = prompt;
+
+        // 2. "BOOSTER" selon le modèle choisi
         if (AppState.selectedModel === 'flux-realism') {
-            finalPrompt += ", photo, highly detailed, 8k resolution, raw photography, masterpiece";
+            // Flux Realism a besoin d'être guidé vers la photo
+            finalPrompt = `High-end photography portrait of ${prompt}, extremely detailed skin texture, 8k uhd, cinematic lighting, f/1.8, professional color grading`;
+        } else if (AppState.selectedModel === 'flux') {
+            // Flux standard aime la précision artistique
+            finalPrompt = `A high-quality artistic rendering of ${prompt}, masterpiece, trending on artstation, highly detailed, sharp focus`;
+        } else if (AppState.selectedModel === 'any-v4-5') {
+            // Pour l'anime, on force le style
+            finalPrompt = `Anime style illustration of ${prompt}, high quality anime art, vibrant colors, detailed background`;
         }
 
         const encodedPrompt = encodeURIComponent(finalPrompt);
 
-        // Déterminer les dimensions
+        // 3. Dimensions
         let width = 1024;
         let height = 1024;
-        if (size === 'landscape') { width = 1792; height = 1024; }
-        else if (size === 'portrait') { width = 1024; height = 1792; }
+        if (size === 'landscape') { width = 1280; height = 720; } // Dimensions plus standards
+        else if (size === 'portrait') { width = 720; height = 1280; }
 
-        // --- NOUVELLE URL DYNAMIQUE ---
-        // On injecte &model=${AppState.selectedModel}
-        const imageUrl = `${POLLINATIONS_API}${encodedPrompt}?width=${width}&height=${height}&model=${AppState.selectedModel}&nologo=true&enhance=true&seed=${Math.floor(Math.random() * 100000)}`;
-        // Attente du chargement de l'image
+        // 4. L'URL avec des paramètres de qualité
+        // On ajoute &enhance=false pour Flux car il fait déjà le travail
+        const isFlux = AppState.selectedModel.includes('flux');
+        const imageUrl = `${POLLINATIONS_API}${encodedPrompt}?width=${width}&height=${height}&model=${AppState.selectedModel}&seed=${Math.floor(Math.random() * 1000000)}&nologo=true&enhance=${isFlux ? 'false' : 'true'}`;
+
+        console.log("URL générée : ", imageUrl); // Pour que tu puisses vérifier dans la console
+
         await new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = () => resolve();
@@ -374,7 +460,6 @@ async function generateImageWithPollinations(prompt, size) {
 
         return imageUrl;
     } catch (error) {
-        console.error('API Error:', error);
         throw error;
     } finally {
         generateBtn.disabled = false;
@@ -625,7 +710,7 @@ function loadSettings() {
 
             // Mettre à jour le menu déroulant HTML pour qu'il affiche le bon modèle au démarrage
             const modelSelect = document.getElementById('model-select');
-            if(modelSelect) modelSelect.value = AppState.selectedModel;
+            if (modelSelect) modelSelect.value = AppState.selectedModel;
         } catch (error) {
             console.error('Erreur chargement paramètres:', error);
         }

@@ -108,6 +108,7 @@
                                 placeholder="Un chat astronaute explorant une galaxie colorée..." rows="3"></textarea>
                             <div class="input-counter">
                                 <span id="char-count">0</span> / 1000
+                                <button id="surprise-btn" class="surprise-btn" title="Idée aléatoire">🎲 Surprise</button>
                             </div>
                         </div>
 
@@ -130,7 +131,8 @@
                         </div>
 
                         <div class="model-selector">
-                            <label class="input-label">Style / Modèle IA</label>
+                            <label class="input-label">Style / Modèle IA</label> 
+                            <span id="model-info"></span>
                             <select id="model-select" class="model-select">
                                 <option value="flux" selected>✨ Flux.1 (Recommandé)</option>
                                 <option value="flux-realism">📸 Photo Réaliste</option>

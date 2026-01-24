@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        C'est l'un des aspects les plus passionnants du développement : assembler des briques (APIs) pour créer quelque
+        chose de complexe. Tu as déjà compris le concept du fetch() pour l'image et la traduction.
+
+        Voici une "liste d'or" d'APIs gratuites, souvent sans clé (ou avec un quota gratuit généreux), classées par
+        utilité pour tes projets futurs.
+        1. Pour l'Intelligence Artificielle & Texte
+
+        Si tu veux que ton application "parle" ou "réfléchisse", voici les meilleures options :
+
+        Hugging Face (Inference API) : C'est le "YouTube de l'IA". Ils ont des milliers de modèles pour faire du résumé
+        de texte, de l'analyse de sentiment (savoir si un texte est joyeux ou triste), ou même répondre à des questions.
+
+        Usage : Faire un chatbot ou un modérateur automatique pour tes prompts.
+
+        Web Speech API (Intégrée au navigateur) : Ce n'est pas une API externe, c'est déjà dans ton téléphone ! Elle
+        permet de transformer la voix en texte (Speech-to-Text) ou de faire lire du texte par une voix de synthèse
+        (Text-to-Speech).
+
+        Usage : Permettre à l'utilisateur de dicter son prompt à la voix au lieu de l'écrire.
+
+        2. Pour le contenu et le fun (Idéal pour ImageAI)
+
+        Pour enrichir ton interface et donner des idées à tes utilisateurs :
+
+        Quotable : Une API très simple qui donne des citations célèbres.
+
+        Lien : https://api.quotable.io/random
+
+        Usage : Afficher une citation inspirante sur ton "Splash Screen" pendant les 3 secondes de chargement.
+
+        Jikan API (Unoficial MyAnimeList) : Une mine d'or pour tout ce qui concerne les animes.
+
+        Usage : Si tu crées une version "Manga" de ton app, tu peux suggérer des noms de personnages réels pour les
+        prompts.
+
+        Open-Meteo : Une API météo incroyable car elle ne nécessite aucune clé API.
+
+        Usage : Changer automatiquement le style de l'image générée selon la météo réelle de l'utilisateur (ex: s'il
+        pleut chez lui, l'IA génère une image sous la pluie).
+
+        3. Pour les outils techniques
+
+        Pour rendre ton application plus "intelligente" sur les données :
+
+        Free Dictionary API : Donne les définitions et synonymes.
+
+        Usage : Si l'utilisateur tape un mot compliqué, tu peux lui suggérer des synonymes plus simples pour améliorer
+        le rendu de l'IA.
+
+        Countries REST API : Toutes les infos sur les pays (drapeaux, monnaies, capitales).
+
+        Usage : Créer un sélecteur de "Style par pays" (ex: style architecture française, japonaise, etc.).
+
+        DiceBear : Génère des avatars (personnages) à partir de texte.
+
+        Lien : https://api.dicebear.com/7.x/pixel-art/svg?seed=TonNom
+
+        Usage : Créer automatiquement une photo de profil unique pour chaque utilisateur de ton app.
+
+        Comment les explorer par toi-même ?
+
+        Le meilleur endroit au monde pour trouver ton bonheur s'appelle "Public APIs" sur GitHub. C'est une liste mise à
+        jour par des milliers de développeurs.
+
+        [!TIP] Conseil de pro : Quand tu cherches une API, privilégie celles marquées "Auth: No" ou "HTTPS: Yes". Cela
+        veut dire que tu peux les tester en 2 minutes avec un simple fetch() sans passer des heures à configurer un
+        compte.
+
+        La logique reste toujours la même :
+
+        Peu importe l'API, ton code ressemblera toujours à ce que tu as appris :
+
+        Préparer l'URL avec les paramètres.
+
+        Lancer le fetch().
+
+        Transformer en json().
+
+        Utiliser le résultat pour changer ton interface (DOM).
+
+        Voudrais-tu qu'on essaie d'en intégrer une petite pour tester ? Par exemple, on pourrait utiliser l'API Quotable
+        pour afficher une petite phrase d'inspiration en bas de ton écran "Générer". Qu'en penses-tu ?
+    </div>
+</body>
+
+</html>
