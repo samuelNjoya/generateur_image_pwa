@@ -1,0 +1,60 @@
+:root { --primary: #4f46e5; }
+
+/* Masquage des sections */
+.screen {
+    display: none;
+    width: 100%;
+    animation: slideUp 0.4s ease-out;
+}
+.screen.active {
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+}
+
+.animate-fadeIn { animation: fadeIn 0.3s ease-in-out; }
+
+/* Loader Ripple */
+.loader-ripple {
+    display: inline-block; position: relative; width: 80px; height: 80px;
+}
+.loader-ripple div {
+    position: absolute; border: 4px solid #fff; opacity: 1;
+    border-radius: 50%; animation: loader-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+#preview-loading .loader-ripple div { border-color: var(--primary); }
+.loader-ripple div:nth-child(2) { animation-delay: -0.5s; }
+
+@keyframes loader-ripple {
+    0% { top: 36px; left: 36px; width: 0; height: 0; opacity: 0; }
+    5% { opacity: 1; }
+    100% { top: 0px; left: 0px; width: 72px; height: 72px; opacity: 0; }
+}
+
+/* Nav Active State */
+.nav-item-link.active {
+    color: var(--primary);
+    transform: scale(1.1);
+}
+
+.size-option-btn.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Toast Styles */
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }

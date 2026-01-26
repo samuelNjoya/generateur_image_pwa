@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ImageAI - PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50 font-sans text-gray-900 select-none">
+
+    <div id="splash-screen" class="fixed inset-0 z-[100] bg-indigo-600 flex flex-col items-center justify-center text-white">
+        <h1 class="text-5xl font-black tracking-tighter mb-2">ImageAI</h1>
+        <div class="loader-ripple"><div></div><div></div></div>
+        <p class="absolute bottom-10 opacity-50 text-sm">Chargement de l'IA...</p>
+    </div>
+
+    <main id="app-container" class="max-w-md mx-auto min-h-screen relative bg-white shadow-xl">
+        
+        <section id="screen-generator" class="screen active flex flex-col p-4 pb-32">
+            <header class="py-6">
+                <h2 class="text-3xl font-extrabold text-gray-900">Créer</h2>
+                <p class="text-gray-500 text-sm">Transforme tes mots en images</p>
+            </header>
+
+            <div class="space-y-6">
+                <div class="relative bg-gray-100 rounded-3xl p-4 transition-all focus-within:bg-white focus-within:ring-2 focus-within:ring-indigo-500">
+                    <textarea id="prompt-input" rows="2" placeholder="Un chat astronaute sur la lune..." 
+                        class="w-full bg-transparent border-none focus:ring-0 text-lg resize-none"></textarea>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-[10px] uppercase tracking-widest text-gray-400 font-bold"><span id="char-count">0</span>/500</span>
+                        <button id="surprise-btn" class="text-xs font-bold text-indigo-600 bg-indigo-100 px-3 py-1 rounded-full active:scale-90 transition-transform">✨ SURPRISE</button>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <label class="text-xs font-black uppercase text-gray-400 ml-1">Modèle d'IA</label>
+                    <select id="model-select" class="w-full bg-gray-100 border-none rounded-2xl p-4 font-medium appearance-none">
+                        <option value="flux">Flux.1 (Équilibré)</option>
+                        <option value="flux-realism">Flux Realism (Photo)</option>
+                        <option value="any-v4-5">Anime Style (V4.5)</option>
+                        <option value="turbo">Turbo (Rapide)</option>
+                    </select>
+                </div>
+
+                <div class="space-y-3">
+                    <label class="text-xs font-black uppercase text-gray-400 ml-1">Format</label>
+                    <div class="flex gap-2">
+                        <button class="size-option-btn active flex-1 py-3 rounded-2xl bg-gray-100 font-bold text-sm" data-size="square">1:1</button>
+                        <button class="size-option-btn flex-1 py-3 rounded-2xl bg-gray-100 font-bold text-sm" data-size="landscape">16:9</button>
+                        <button class="size-option-btn flex-1 py-3 rounded-2xl bg-gray-100 font-bold text-sm" data-size="portrait">9:16</button>
+                    </div>
+                </div>
+
+                <button id="generate-btn" class="w-full bg-indigo-600 text-white py-5 rounded-3xl font-black text-lg shadow-lg shadow-indigo-200 active:scale-95 transition-all">
+                    GÉNÉRER L'IMAGE
+                </button>
+
+                <div id="preview-container" class="mt-4 min-h-[300px] flex items-center justify-center relative">
+                    <div id="preview-placeholder" class="text-center p-10 border-2 border-dashed border-gray-200 rounded-3xl text-gray-300">
+                        <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <p class="text-sm font-medium">Prêt pour la création</p>
+                    </div>
+
+                    <div id="preview-loading" class="hidden flex-col items-center">
+                        <div class="loader-ripple"><div></div><div></div></div>
+                        <p class="mt-4 text-indigo-600 font-black animate-pulse">L'IA DESSINE...</p>
+                    </div>
+
+                    <div id="preview-image-box" class="hidden w-full animate-fadeIn">
+                        <img id="preview-image" src="" class="w-full rounded-3xl shadow-2xl bg-gray-100">
+                        <div class="flex gap-3 mt-4">
+                            <button id="preview-share-btn" class="flex-1 bg-white border border-gray-200 p-4 rounded-2xl font-bold flex items-center justify-center gap-2">Partager</button>
+                            <button id="preview-download-btn" class="flex-1 bg-indigo-50 text-indigo-600 p-4 rounded-2xl font-bold flex items-center justify-center gap-2">Sauver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="screen-history" class="screen hidden p-4 pb-32">
+            <header class="py-6 flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-gray-900">Galerie</h2>
+                    <p class="text-gray-500 text-sm"><span id="total-images">0</span> créations</p>
+                </div>
+                <button id="clear-history-btn" class="p-2 text-red-500 font-bold text-xs uppercase tracking-widest">Effacer</button>
+            </header>
+            <div id="history-grid" class="grid grid-cols-2 gap-4">
+                </div>
+        </section>
+
+        <nav class="fixed bottom-0 inset-x-0 max-w-md mx-auto bg-white/90 backdrop-blur-xl border-t border-gray-100 flex justify-around items-center py-4 px-8 z-50">
+            <button class="nav-item group" data-screen="generator">
+                <div class="nav-item-link active flex flex-col items-center gap-1 transition-all">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+                    <span class="text-[10px] font-black uppercase tracking-tighter">Créer</span>
+                </div>
+            </button>
+            <button class="nav-item group" data-screen="history">
+                <div class="nav-item-link text-gray-400 flex flex-col items-center gap-1 transition-all">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+                    <span class="text-[10px] font-black uppercase tracking-tighter">Galerie</span>
+                </div>
+            </button>
+        </nav>
+    </main>
+
+    <div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 px-8 py-4 rounded-full text-white font-bold text-sm shadow-2xl transition-all duration-500 z-[100] opacity-0 translate-y-10 pointer-events-none"></div>
+
+    <div id="image-modal" class="fixed inset-0 bg-black/95 z-[110] hidden flex-col p-4 animate-fadeIn">
+        <button id="modal-close" class="self-end text-white p-4 font-black">FERMER</button>
+        <div class="flex-1 flex items-center justify-center">
+            <img id="modal-image" src="" class="max-w-full max-h-[70vh] rounded-xl shadow-2xl">
+        </div>
+        <div class="p-6 text-center">
+            <p id="modal-prompt" class="text-white/80 italic text-sm mb-6"></p>
+            <div class="flex gap-4">
+                <button id="modal-share-btn" class="flex-1 bg-white text-black py-4 rounded-2xl font-black">PARTAGER</button>
+                <button id="modal-delete-btn" class="flex-1 bg-red-600 text-white py-4 rounded-2xl font-black">SUPPRIMER</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
