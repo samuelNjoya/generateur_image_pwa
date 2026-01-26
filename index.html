@@ -1,399 +1,237 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#111827">
-    <meta name="description" content="Générez des images gratuitement avec l'IA">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="SmartImageAI">
+    <meta name="theme-color" content="#020617">
+    <title>SmartImageAI - Générateur d'images</title>
 
-    <title>SmartImageAI - Générateur d'images IA gratuit</title>
-
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="icon.svg">
-    <link rel="apple-touch-icon" href="icon-512.png">
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="styles.css">
+    
+    <script>
+        // Configuration Tailwind pour tes couleurs personnalisées
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#a855f7',
+                        dark: '#020617',
+                        surface: '#1e293b'
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
 </head>
 
-<body>
-    <div id="app">
+<body class="bg-dark text-slate-100 font-sans antialiased overflow-x-hidden">
 
-        <!-- Splash Screen -->
-        <div id="splash-screen" class="splash-screen">
-            <div class="splash-content">
-                <div class="splash-logo">
-                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="100" cy="100" r="80" fill="#2563EB" opacity="0.1" />
-                        <circle cx="100" cy="100" r="60" fill="none" stroke="#2563EB" stroke-width="8" />
-                        <circle cx="100" cy="100" r="20" fill="#10B981" />
-                    </svg>
-                </div>
-                <h1 class="splash-title">SmartImageAI</h1>
-                <p class="splash-subtitle">Génération gratuite par IA</p>
-                <div class="splash-loader"></div>
+    <div id="splash-screen" class="fixed inset-0 z-[100] bg-dark flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative w-24 h-24 mb-6">
+            <div class="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <div class="absolute inset-4 bg-primary/20 rounded-full flex items-center justify-center text-primary text-2xl">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
             </div>
         </div>
+        <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">SmartImageAI</h1>
+        <p class="text-slate-400 mt-2 text-sm">L'IA créative à portée de main</p>
+    </div>
 
-        <!-- Header -->
-        <header id="app-header" class="app-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="logo-mini">
-                        <img src="logo.png" alt="">
-                    </div>
-                    <h1 class="app-title" id="page-title">Générer</h1>
+    <div id="app" class="min-h-screen flex flex-col lg:flex-row">
+
+        <aside class="hidden lg:flex w-64 bg-slate-900/50 border-r border-slate-800 flex-col p-6 space-y-8">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-primary rounded-lg text-white">
+                    <i class="fa-solid fa-bolt text-xl"></i>
                 </div>
+                <span class="text-xl font-bold">SmartImageAI</span>
             </div>
-        </header>
 
-        <!-- Main Content -->
-        <main id="main-content" class="main-content">
+            <nav class="flex-1 space-y-2">
+                <button data-screen="generator" class="nav-item-link active w-full flex items-center space-x-3 p-3 rounded-xl transition-all">
+                    <i class="fa-solid fa-plus-circle w-6"></i>
+                    <span>Générer</span>
+                </button>
+                <button data-screen="history" class="nav-item-link w-full flex items-center space-x-3 p-3 rounded-xl transition-all opacity-60 hover:opacity-100">
+                    <i class="fa-solid fa-images w-6"></i>
+                    <span>Historique</span>
+                </button>
+                <button data-screen="settings" class="nav-item-link w-full flex items-center space-x-3 p-3 rounded-xl transition-all opacity-60 hover:opacity-100">
+                    <i class="fa-solid fa-gear w-6"></i>
+                    <span>Paramètres</span>
+                </button>
+                <button data-screen="about" class="nav-item-link w-full flex items-center space-x-3 p-3 rounded-xl transition-all opacity-60 hover:opacity-100">
+                    <i class="fa-solid fa-info-circle w-6"></i>
+                    <span>À propos</span>
+                </button>
+            </nav>
 
-            <!-- Screen 1: Generator -->
-            <div id="screen-generator" class="screen active">
-                <div class="generator-container">
+            <div class="p-4 bg-slate-800/50 rounded-2xl border border-slate-700/50">
+                <p class="text-xs text-slate-400 mb-2">Version 1.0.0</p>
+                <p class="text-xs text-slate-500 italic uppercase font-bold tracking-widest">Premium Free</p>
+            </div>
+        </aside>
 
-                    <!-- Preview Area -->
-                    <div class="preview-area" id="preview-area">
-                        <div class="preview-placeholder" id="preview-placeholder">
-                            <div class="placeholder-icon">
-                                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="20" y="30" width="80" height="60" rx="8" fill="none" stroke="#2563EB"
-                                        stroke-width="3" opacity="0.3" />
-                                    <circle cx="40" cy="50" r="8" fill="#2563EB" opacity="0.3" />
-                                    <path d="M 30 75 L 50 60 L 70 70 L 90 55" stroke="#10B981" stroke-width="3"
-                                        fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
-                                </svg>
+        <main class="flex-1 flex flex-col relative h-[100dvh] overflow-hidden">
+            
+            <header class="lg:hidden h-16 flex items-center justify-between px-6 border-b border-slate-800 bg-dark/80 backdrop-blur-md sticky top-0 z-30">
+                <h1 class="text-xl font-bold text-white" id="page-title">Générer</h1>
+                <div class="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-user text-xs text-slate-400"></i>
+                </div>
+            </header>
+
+            <div id="main-content" class="flex-1 overflow-y-auto pb-40 lg:pb-10 px-4 pt-6">
+                
+                <div id="screen-generator" class="screen active max-w-4xl mx-auto h-full flex flex-col">
+                    
+                    <div class="flex-1 min-h-[300px] bg-slate-900/40 rounded-3xl border border-slate-800 flex items-center justify-center relative overflow-hidden group mb-6" id="preview-area">
+                        <div id="preview-placeholder" class="text-center p-8">
+                            <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-600">
+                                <i class="fa-solid fa-image text-3xl"></i>
                             </div>
-                            <p class="placeholder-text">Votre image apparaîtra ici</p>
+                            <p class="text-slate-500 font-medium">Votre création apparaîtra ici</p>
+                            <p class="text-slate-600 text-xs mt-2">Précisez votre style pour de meilleurs résultats</p>
                         </div>
-                        <div class="preview-image-container" id="preview-image-container" style="display: none;">
-                            <img id="preview-image" alt="Image générée" />
-                            <div class="preview-actions">
-                                <button class="preview-btn download-btn" id="preview-download-btn">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                                    </svg>
-                                    Télécharger
+
+                        <div id="preview-image-container" class="hidden w-full h-full p-2">
+                            <img id="preview-image" class="w-full h-full object-contain rounded-2xl" src="" alt="Image générée">
+                            <div class="absolute bottom-6 right-6 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
+                                <button id="preview-download-btn" class="p-3 bg-white text-dark rounded-full shadow-xl hover:scale-110 active:scale-95 transition-transform">
+                                    <i class="fa-solid fa-download"></i>
                                 </button>
-                                <button class="preview-btn share-btn" id="preview-share-btn">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" />
-                                    </svg>
-                                    Partager
+                                <button id="preview-share-btn" class="p-3 bg-primary text-white rounded-full shadow-xl hover:scale-110 active:scale-95 transition-transform">
+                                    <i class="fa-solid fa-share-nodes"></i>
                                 </button>
                             </div>
                         </div>
-                        <div class="preview-loading" id="preview-loading" style="display: none;">
-                            <div class="loading-spinner"></div>
-                            <p class="loading-text">Création en cours...</p>
-                            <p class="loading-subtext">Cela peut prendre quelques secondes</p>
+
+                        <div id="preview-loading" class="hidden absolute inset-0 bg-dark/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-10">
+                            <div class="loader-ripple mb-4"><div></div><div></div></div>
+                            <p class="text-primary font-bold text-lg animate-pulse">L'IA réfléchit...</p>
+                            <p class="text-slate-400 text-sm mt-1" id="loading-status">Ceci peut prendre 3 à 5 secondes</p>
                         </div>
                     </div>
 
-                    <!-- Input Area -->
-                    <div class="input-area">
-                        <div class="input-group">
-                            <label for="prompt-input" class="input-label">Décrivez votre image</label>
-                            <textarea id="prompt-input" class="prompt-input"
-                                placeholder="Un chat astronaute explorant une galaxie colorée..." rows="3"></textarea>
-                            <div class="input-counter">
-                                <span id="char-count">0</span> / 1000
-                                <button id="surprise-btn" class="surprise-btn" title="Idée aléatoire">🎲 Surprise</button>
+                    <div class="fixed lg:relative bottom-[80px] lg:bottom-0 left-0 right-0 p-4 lg:p-0 z-40">
+                        <div class="max-w-4xl mx-auto">
+                            <div class="flex items-center space-x-2 mb-3 overflow-x-auto no-scrollbar py-1">
+                                <select id="model-select" class="bg-slate-800 border-none rounded-full px-4 py-1.5 text-xs font-semibold focus:ring-2 ring-primary cursor-pointer text-slate-200">
+                                    <option value="flux">✨ Flux.1 (Précis)</option>
+                                    <option value="any-v4-5">🎨 Manga / Anime</option>
+                                    <option value="flux-realism">📸 Réalisme</option>
+                                    <option value="turbo">⚡ Rapide</option>
+                                </select>
+                                
+                                <div class="h-4 w-[1px] bg-slate-700 mx-2"></div>
+
+                                <div class="flex bg-slate-800 rounded-full p-1" id="size-options-container">
+                                    <button data-size="square" class="size-option-btn active px-3 py-1 rounded-full text-[10px] uppercase font-bold transition-all">1:1</button>
+                                    <button data-size="landscape" class="size-option-btn px-3 py-1 rounded-full text-[10px] uppercase font-bold transition-all opacity-50">16:9</button>
+                                    <button data-size="portrait" class="size-option-btn px-3 py-1 rounded-full text-[10px] uppercase font-bold transition-all opacity-50">9:16</button>
+                                </div>
+                            </div>
+
+                            <div class="relative bg-slate-900 border border-slate-700 p-2 rounded-2xl shadow-2xl focus-within:border-primary transition-colors">
+                                <textarea id="prompt-input" rows="1" class="w-full bg-transparent border-none focus:ring-0 text-slate-200 placeholder-slate-500 pr-24 py-3 pl-4 resize-none max-h-32 scrollbar-hide" placeholder="Décrivez votre image..."></textarea>
+                                
+                                <div class="absolute right-3 bottom-3 flex items-center space-x-2">
+                                    <button id="surprise-btn" class="p-2 text-slate-400 hover:text-white transition-colors" title="Surprise !">
+                                        <i class="fa-solid fa-dice-five text-xl"></i>
+                                    </button>
+                                    <button id="generate-btn" class="h-10 w-10 bg-primary hover:bg-indigo-500 text-white rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center transition-all hover:scale-105 active:scale-95">
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-[10px] text-slate-500 text-center uppercase tracking-widest font-bold">
+                                Généré gratuitement par ImageAI Intelligence
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="size-selector">
-                            <label class="input-label">Format de l'image</label>
-                            <div class="size-options">
-                                <button class="size-option active" data-size="square">
-                                    <div class="size-icon square"></div>
-                                    <span>Carré</span>
-                                </button>
-                                <button class="size-option" data-size="landscape">
-                                    <div class="size-icon landscape"></div>
-                                    <span>Paysage</span>
-                                </button>
-                                <button class="size-option" data-size="portrait">
-                                    <div class="size-icon portrait"></div>
-                                    <span>Portrait</span>
-                                </button>
-                            </div>
+                <div id="screen-history" class="screen hidden max-w-6xl mx-auto">
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <h2 class="text-2xl font-bold">Ma Galerie</h2>
+                            <p class="text-slate-400 text-sm"><span id="total-images">0</span> images créées</p>
                         </div>
-
-                        <div class="model-selector">
-                            <label class="input-label">Style / Modèle IA</label> 
-                            <span id="model-info"></span>
-                            <select id="model-select" class="model-select">
-                                <option value="flux" selected>✨ Flux.1 (Recommandé)</option>
-                                <option value="flux-realism">📸 Photo Réaliste</option>
-                                <option value="any-v4-5">🎨 Style Anime / Manga</option>
-                                <option value="turbo">⚡ Rapide (Turbo)</option>
-                            </select>
-                        </div>
-
-                        <button class="generate-btn" id="generate-btn">
-                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="3" />
-                                <path
-                                    d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4l4.2-4.2" />
-                            </svg>
-                            <span class="btn-text">Générer gratuitement</span>
+                        <button id="clear-history-btn" class="text-red-400 hover:text-red-300 text-sm flex items-center space-x-2">
+                            <i class="fa-solid fa-trash-can"></i>
+                            <span>Tout vider</span>
                         </button>
-
-                        <div class="cost-estimate">
-                            <small>✨ <strong>100% gratuit</strong> - Aucun paiement requis</small>
-                        </div>
                     </div>
+                    <div id="history-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        </div>
                 </div>
-            </div>
 
-            <!-- Screen 2: History -->
-            <div id="screen-history" class="screen">
-                <div class="history-container">
-                    <div class="history-header">
-                        <h2 class="section-title">Historique</h2>
-                        <button class="clear-history-btn" id="clear-history-btn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path
-                                    d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                            </svg>
-                            Effacer tout
+                <div id="screen-settings" class="screen hidden max-w-2xl mx-auto space-y-6">
+                    <h2 class="text-2xl font-bold mb-6">Paramètres</h2>
+                    <div class="bg-slate-900 rounded-3xl p-6 border border-slate-800 space-y-4">
+                        <button id="reset-app-btn" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-500 p-4 rounded-2xl flex items-center justify-between transition-colors">
+                            <span class="font-semibold text-sm">Réinitialiser l'application</span>
+                            <i class="fa-solid fa-triangle-exclamation"></i>
                         </button>
                     </div>
-
-                    <div class="history-stats">
-                        <div class="stat-card">
-                            <div class="stat-number" id="total-images">0</div>
-                            <div class="stat-label">Images générées</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">∞</div>
-                            <div class="stat-label">Gratuit illimité</div>
-                        </div>
-                    </div>
-
-                    <div class="history-grid" id="history-grid">
-                        <div class="empty-state">
-                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="60" cy="60" r="40" fill="none" stroke="currentColor" stroke-width="2"
-                                    opacity="0.3" />
-                                <path d="M 40 60 L 50 70 L 70 50" stroke="currentColor" stroke-width="3" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round" opacity="0.3" />
-                            </svg>
-                            <p>Aucune image générée</p>
-                            <small>Vos créations apparaîtront ici</small>
-                        </div>
-                    </div>
                 </div>
+
+                <div id="screen-about" class="screen hidden max-w-2xl mx-auto text-center space-y-6">
+                    <div class="w-20 h-20 bg-primary/20 rounded-3xl flex items-center justify-center mx-auto text-primary text-3xl">
+                        <i class="fa-solid fa-rocket"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold uppercase tracking-tight">ImageAI <span class="text-primary font-black">Pro</span></h2>
+                    <p class="text-slate-400">Application gratuite de génération d'images haute performance utilisant les derniers modèles d'intelligence artificielle.</p>
+                </div>
+
             </div>
 
-            <!-- Screen 3: Settings -->
-            <div id="screen-settings" class="screen">
-                <div class="settings-container">
-                    <h2 class="section-title">Paramètres</h2>
-
-                    <div class="settings-section">
-                        <h3 class="settings-subtitle">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M12 1v6m0 6v6" />
-                            </svg>
-                            Génération gratuite
-                        </h3>
-                        <p class="settings-description">
-                            Cette application utilise l'intelligence artificielle gratuite. Aucune inscription ni
-                            paiement nécessaire !
-                        </p>
-
-                        <div class="info-box">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="12" y1="16" x2="12" y2="12" />
-                                <line x1="12" y1="8" x2="12.01" y2="8" />
-                            </svg>
-                            <div>
-                                <strong>100% Gratuit</strong>
-                                <p>Générez autant d'images que vous le souhaitez. Aucune limite, aucun coût.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="settings-section">
-                        <h3 class="settings-subtitle">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
-                            </svg>
-                            Données de l'application
-                        </h3>
-
-                        <button class="danger-btn" id="reset-app-btn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="1 4 1 10 7 10" />
-                                <polyline points="23 20 23 14 17 14" />
-                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
-                            </svg>
-                            Réinitialiser l'application
-                        </button>
-                        <small class="danger-text">Cette action supprimera toutes vos données locales</small>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Screen 4: About -->
-            <div id="screen-about" class="screen">
-                <div class="about-container">
-                    <div class="about-logo">
-                        <img src="logo.png" alt="">
-                    </div>
-
-                    <h1 class="about-title">SmartImageAI</h1>
-                    <p class="about-version">Version 1.0.0</p>
-
-                    <div class="about-content">
-                        <div class="about-section">
-                            <h3>À propos</h3>
-                            <p>SmartImageAI est une application web progressive (PWA) gratuite qui vous permet de
-                                générer des
-                                images exceptionnelles grâce à l'intelligence artificielle.</p>
-                        </div>
-
-                        <div class="about-section">
-                            <h3>Fonctionnalités</h3>
-                            <ul class="feature-list">
-                                <li>✨ Génération d'images par IA</li>
-                                <li>💯 100% gratuit et illimité</li>
-                                <li>📱 Application installable (PWA)</li>
-                                <li>📚 Historique complet</li>
-                                <li>💾 Téléchargement des images</li>
-                                <li>🎨 3 formats disponibles</li>
-                            </ul>
-                        </div>
-
-                        <div class="about-section">
-                            <h3>Confidentialité</h3>
-                            <p>Toutes vos données sont stockées localement sur votre appareil. Aucune donnée personnelle
-                                n'est collectée.</p>
-                        </div>
-                    </div>
-
-                    <p class="about-footer">
-                        Fait avec ❤️ pour les créatifs
-                    </p>
-                </div>
-            </div>
+            <nav class="lg:hidden fixed bottom-0 left-0 right-0 h-20 bg-dark/80 backdrop-blur-xl border-t border-slate-800 flex items-center justify-around px-2 z-50">
+                <button data-screen="generator" class="nav-item-link active flex flex-col items-center space-y-1 p-2 min-w-[64px]">
+                    <i class="fa-solid fa-wand-sparkles text-lg"></i>
+                    <span class="text-[10px] font-bold uppercase">Créer</span>
+                </button>
+                <button data-screen="history" class="nav-item-link flex flex-col items-center space-y-1 p-2 min-w-[64px] opacity-40">
+                    <i class="fa-solid fa-box-archive text-lg"></i>
+                    <span class="text-[10px] font-bold uppercase">Archives</span>
+                </button>
+                <button data-screen="settings" class="nav-item-link flex flex-col items-center space-y-1 p-2 min-w-[64px] opacity-40">
+                    <i class="fa-solid fa-sliders text-lg"></i>
+                    <span class="text-[10px] font-bold uppercase">Outils</span>
+                </button>
+                <button data-screen="about" class="nav-item-link flex flex-col items-center space-y-1 p-2 min-w-[64px] opacity-40">
+                    <i class="fa-solid fa-id-card-clip text-lg"></i>
+                    <span class="text-[10px] font-bold uppercase">Infos</span>
+                </button>
+            </nav>
 
         </main>
+    </div>
 
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <button class="nav-item active" data-screen="generator">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="3" />
-                    <path
-                        d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4l4.2-4.2" />
-                </svg>
-                <span class="nav-label">Générer</span>
-            </button>
-            <button class="nav-item" data-screen="history">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7" />
-                    <rect x="14" y="3" width="7" height="7" />
-                    <rect x="14" y="14" width="7" height="7" />
-                    <rect x="3" y="14" width="7" height="7" />
-                </svg>
-                <span class="nav-label">Historique</span>
-            </button>
-            <button class="nav-item" data-screen="settings">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="3" />
-                    <path
-                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                </svg>
-                <span class="nav-label">Paramètres</span>
-            </button>
-            <button class="nav-item" data-screen="about">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="16" x2="12" y2="12" />
-                    <line x1="12" y1="8" x2="12.01" y2="8" />
-                </svg>
-                <span class="nav-label">À propos</span>
-            </button>
-        </nav>
+    <div id="toast" class="fixed top-8 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-2xl bg-slate-800 border border-slate-700 shadow-2xl transition-all duration-300 translate-y-[-100px] opacity-0 text-sm font-medium"></div>
 
-        <!-- Toast Notification -->
-        <div id="toast" class="toast"></div>
-
-        <!-- Image Modal -->
-        <div id="image-modal" class="image-modal">
-            <div class="modal-overlay"></div>
-            <div class="modal-content">
-                <button class="modal-close" id="modal-close">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                </button>
-                <img id="modal-image" alt="Image en plein écran" />
-                <div class="modal-info">
-                    <p id="modal-prompt"></p>
-                    <div class="modal-actions">
-                        <button class="modal-btn" id="modal-download-btn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                            </svg>
-                            Télécharger
-                        </button>
-                        <button class="modal-btn" id="modal-share-btn">
-                            Partager
-                        </button>
-                        <button class="modal-btn danger" id="modal-delete-btn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path
-                                    d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                            </svg>
-                            Supprimer
-                        </button>
-                    </div>
-                </div>
+    <div id="image-modal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-dark/95 backdrop-blur-md"></div>
+        <div class="relative w-full max-w-4xl max-h-[90vh] flex flex-col items-center">
+            <button id="modal-close" class="absolute -top-12 right-0 text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
+            <img id="modal-image" class="w-full h-full object-contain rounded-xl" src="">
+            <div class="mt-4 flex space-x-4">
+                <button id="modal-download-btn" class="px-6 py-2 bg-white text-dark rounded-full font-bold text-sm"><i class="fa-solid fa-download mr-2"></i>Sauver</button>
+                <button id="modal-delete-btn" class="px-6 py-2 bg-red-500 text-white rounded-full font-bold text-sm"><i class="fa-solid fa-trash-can mr-2"></i>Effacer</button>
             </div>
         </div>
-
-        <!-- PWA Install Prompt -->
-        <div id="install-prompt" class="install-prompt" style="display: none;">
-            <div class="install-prompt-content">
-                <div class="install-prompt-icon">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="20" cy="20" r="18" fill="#2563EB" />
-                        <circle cx="20" cy="20" r="8" fill="#10B981" />
-                    </svg>
-                </div>
-                <div class="install-prompt-text">
-                    <strong>Installer SmartImageAI</strong>
-                    <p>Accédez rapidement à l'app depuis votre écran d'accueil</p>
-                </div>
-                <div class="install-prompt-buttons">
-                    <button class="install-btn" id="install-btn">Installer</button>
-                    <button class="dismiss-btn" id="dismiss-install-btn">Plus tard</button>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <script src="app.js"></script>
 </body>
-
 </html>
