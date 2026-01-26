@@ -5,7 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#020617">
-    <title>SmartImageAI - Générateur d'images</title>
+    <meta name="description" content="Générez des images gratuitement avec l'IA">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SmartImageAI">
+    
+    <title>SmartImageAI - Générateur d'images IA gratuit</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon-512.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -35,6 +44,7 @@
 
 <body class="bg-dark text-slate-100 font-sans antialiased overflow-x-hidden">
 
+    <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 z-[100] bg-dark flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="relative w-24 h-24 mb-6">
             <div class="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
@@ -49,6 +59,7 @@
 
     <div id="app" class="min-h-screen flex flex-col lg:flex-row">
 
+        <!-- SIDEBAR - VERSION WEB UNIQUEMENT -->
         <aside class="hidden lg:flex w-64 bg-slate-900/50 border-r border-slate-800 flex-col p-6 space-y-8">
             <div class="flex items-center space-x-3">
                 <div class="p-2 bg-primary rounded-lg text-white">
@@ -57,33 +68,36 @@
                 <span class="text-xl font-bold">SmartImageAI</span>
             </div>
 
+            <!-- Navigation Sidebar (Web) -->
             <nav class="flex-1 space-y-2">
-                <button data-screen="generator" class="nav-item-link active w-full flex items-center space-x-3 p-3 rounded-xl transition-all">
-                    <i class="fa-solid fa-plus-circle w-6"></i>
-                    <span>Générer</span>
+                <button data-screen="generator" class="nav-item active w-full flex items-center space-x-3 p-3 rounded-xl transition-all text-left">
+                    <i class="fa-solid fa-wand-sparkles w-6"></i>
+                    <span class="font-semibold">Générer</span>
                 </button>
-                <button data-screen="history" class="nav-item-link w-full flex items-center space-x-3 p-3 rounded-xl transition-all opacity-60 hover:opacity-100">
+                <button data-screen="history" class="nav-item w-full flex items-center space-x-3 p-3 rounded-xl transition-all opacity-60 hover:opacity-100 text-left">
                     <i class="fa-solid fa-images w-6"></i>
-                    <span>Historique</span>
+                    <span class="font-semibold">Historique</span>
                 </button>
-                <button data-screen="settings" class="nav-item-link w-full flex items-center space-x-3 p-3 rounded-xl transition-all opacity-60 hover:opacity-100">
+                <button data-screen="settings" class="nav-item w-full flex items-center space-x-3 p-3 rounded-xl transition-all opacity-60 hover:opacity-100 text-left">
                     <i class="fa-solid fa-gear w-6"></i>
-                    <span>Paramètres</span>
+                    <span class="font-semibold">Paramètres</span>
                 </button>
-                <button data-screen="about" class="nav-item-link w-full flex items-center space-x-3 p-3 rounded-xl transition-all opacity-60 hover:opacity-100">
+                <button data-screen="about" class="nav-item w-full flex items-center space-x-3 p-3 rounded-xl transition-all opacity-60 hover:opacity-100 text-left">
                     <i class="fa-solid fa-info-circle w-6"></i>
-                    <span>À propos</span>
+                    <span class="font-semibold">À propos</span>
                 </button>
             </nav>
 
             <div class="p-4 bg-slate-800/50 rounded-2xl border border-slate-700/50">
                 <p class="text-xs text-slate-400 mb-2">Version 1.0.0</p>
-                <p class="text-xs text-slate-500 italic uppercase font-bold tracking-widest">Premium Free</p>
+                <p class="text-xs text-slate-500 italic uppercase font-bold tracking-widest">100% Gratuit</p>
             </div>
         </aside>
 
+        <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col relative h-[100dvh] overflow-hidden">
             
+            <!-- Header Mobile uniquement -->
             <header class="lg:hidden h-16 flex items-center justify-between px-6 border-b border-slate-800 bg-dark/80 backdrop-blur-md sticky top-0 z-30">
                 <h1 class="text-xl font-bold text-white" id="page-title">Générer</h1>
                 <div class="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
@@ -91,19 +105,25 @@
                 </div>
             </header>
 
+            <!-- Zone de contenu scrollable -->
             <div id="main-content" class="flex-1 overflow-y-auto pb-40 lg:pb-10 px-4 pt-6">
                 
+                <!-- SCREEN 1: GENERATOR -->
                 <div id="screen-generator" class="screen active max-w-4xl mx-auto h-full flex flex-col">
                     
+                    <!-- Zone de prévisualisation -->
                     <div class="flex-1 min-h-[300px] bg-slate-900/40 rounded-3xl border border-slate-800 flex items-center justify-center relative overflow-hidden group mb-6" id="preview-area">
+                        
+                        <!-- Placeholder (image non générée) -->
                         <div id="preview-placeholder" class="text-center p-8">
                             <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-600">
                                 <i class="fa-solid fa-image text-3xl"></i>
                             </div>
                             <p class="text-slate-500 font-medium">Votre création apparaîtra ici</p>
-                            <p class="text-slate-600 text-xs mt-2">Précisez votre style pour de meilleurs résultats</p>
+                            <p class="text-slate-600 text-xs mt-2">Décrivez votre vision et laissez l'IA créer</p>
                         </div>
 
+                        <!-- Image générée -->
                         <div id="preview-image-container" class="hidden w-full h-full p-2">
                             <img id="preview-image" class="w-full h-full object-contain rounded-2xl" src="" alt="Image générée">
                             <div class="absolute bottom-6 right-6 flex space-x-3 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
@@ -116,37 +136,43 @@
                             </div>
                         </div>
 
+                        <!-- Loader pendant génération -->
                         <div id="preview-loading" class="hidden absolute inset-0 bg-dark/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-10">
                             <div class="loader-ripple mb-4"><div></div><div></div></div>
                             <p class="text-primary font-bold text-lg animate-pulse">L'IA réfléchit...</p>
-                            <p class="text-slate-400 text-sm mt-1" id="loading-status">Ceci peut prendre 3 à 5 secondes</p>
+                            <p class="text-slate-400 text-sm mt-1">Ceci peut prendre 3 à 5 secondes</p>
                         </div>
                     </div>
 
-                    <div class="fixed lg:relative bottom-[80px] lg:bottom-0 left-0 right-0 p-4 lg:p-0 z-40">
+                    <!-- Zone de saisie (en bas sur mobile, normale sur desktop) -->
+                    <div class="sticky lg:relative bottom-0 lg:bottom-auto left-0 right-0 p-4 lg:p-0 z-40 bg-dark lg:bg-transparent mt-auto">
                         <div class="max-w-4xl mx-auto">
+                            
+                            <!-- Options : Modèle + Format -->
                             <div class="flex items-center space-x-2 mb-3 overflow-x-auto no-scrollbar py-1">
                                 <select id="model-select" class="bg-slate-800 border-none rounded-full px-4 py-1.5 text-xs font-semibold focus:ring-2 ring-primary cursor-pointer text-slate-200">
                                     <option value="flux">✨ Flux.1 (Précis)</option>
-                                    <option value="any-v4-5">🎨 Manga / Anime</option>
                                     <option value="flux-realism">📸 Réalisme</option>
+                                    <option value="any-v4-5">🎨 Manga / Anime</option>
                                     <option value="turbo">⚡ Rapide</option>
                                 </select>
                                 
                                 <div class="h-4 w-[1px] bg-slate-700 mx-2"></div>
 
-                                <div class="flex bg-slate-800 rounded-full p-1" id="size-options-container">
-                                    <button data-size="square" class="size-option-btn active px-3 py-1 rounded-full text-[10px] uppercase font-bold transition-all">1:1</button>
-                                    <button data-size="landscape" class="size-option-btn px-3 py-1 rounded-full text-[10px] uppercase font-bold transition-all opacity-50">16:9</button>
-                                    <button data-size="portrait" class="size-option-btn px-3 py-1 rounded-full text-[10px] uppercase font-bold transition-all opacity-50">9:16</button>
+                                <!-- Sélecteur de format -->
+                                <div class="flex bg-slate-800 rounded-full p-1">
+                                    <button data-size="square" class="size-option active px-3 py-1 rounded-full text-[10px] uppercase font-bold transition-all">1:1</button>
+                                    <button data-size="landscape" class="size-option px-3 py-1 rounded-full text-[10px] uppercase font-bold transition-all opacity-50">16:9</button>
+                                    <button data-size="portrait" class="size-option px-3 py-1 rounded-full text-[10px] uppercase font-bold transition-all opacity-50">9:16</button>
                                 </div>
                             </div>
 
+                            <!-- Champ de prompt -->
                             <div class="relative bg-slate-900 border border-slate-700 p-2 rounded-2xl shadow-2xl focus-within:border-primary transition-colors">
                                 <textarea id="prompt-input" rows="1" class="w-full bg-transparent border-none focus:ring-0 text-slate-200 placeholder-slate-500 pr-24 py-3 pl-4 resize-none max-h-32 scrollbar-hide" placeholder="Décrivez votre image..."></textarea>
                                 
                                 <div class="absolute right-3 bottom-3 flex items-center space-x-2">
-                                    <button id="surprise-btn" class="p-2 text-slate-400 hover:text-white transition-colors" title="Surprise !">
+                                    <button id="surprise-btn" class="p-2 text-slate-400 hover:text-white transition-colors" title="Prompt aléatoire">
                                         <i class="fa-solid fa-dice-five text-xl"></i>
                                     </button>
                                     <button id="generate-btn" class="h-10 w-10 bg-primary hover:bg-indigo-500 text-white rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center transition-all hover:scale-105 active:scale-95">
@@ -154,62 +180,112 @@
                                     </button>
                                 </div>
                             </div>
+
                             <div class="mt-2 text-[10px] text-slate-500 text-center uppercase tracking-widest font-bold">
-                                Généré gratuitement par ImageAI Intelligence
+                                ✨ 100% Gratuit - Illimité
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- SCREEN 2: HISTORY -->
                 <div id="screen-history" class="screen hidden max-w-6xl mx-auto">
                     <div class="flex justify-between items-center mb-8">
                         <div>
                             <h2 class="text-2xl font-bold">Ma Galerie</h2>
                             <p class="text-slate-400 text-sm"><span id="total-images">0</span> images créées</p>
                         </div>
-                        <button id="clear-history-btn" class="text-red-400 hover:text-red-300 text-sm flex items-center space-x-2">
+                        <button id="clear-history-btn" class="text-red-400 hover:text-red-300 text-sm flex items-center space-x-2 transition-colors">
                             <i class="fa-solid fa-trash-can"></i>
                             <span>Tout vider</span>
                         </button>
                     </div>
                     <div id="history-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        </div>
+                        <!-- Images générées apparaîtront ici -->
+                    </div>
                 </div>
 
+                <!-- SCREEN 3: SETTINGS -->
                 <div id="screen-settings" class="screen hidden max-w-2xl mx-auto space-y-6">
                     <h2 class="text-2xl font-bold mb-6">Paramètres</h2>
+                    
                     <div class="bg-slate-900 rounded-3xl p-6 border border-slate-800 space-y-4">
+                        <div class="flex items-start space-x-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-2xl">
+                            <i class="fa-solid fa-info-circle text-blue-400 text-xl mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold text-white mb-1">100% Gratuit</h3>
+                                <p class="text-slate-400 text-sm">Cette application utilise des modèles d'IA gratuits. Aucune inscription ni paiement requis.</p>
+                            </div>
+                        </div>
+
                         <button id="reset-app-btn" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-500 p-4 rounded-2xl flex items-center justify-between transition-colors">
                             <span class="font-semibold text-sm">Réinitialiser l'application</span>
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </button>
+                        <p class="text-xs text-slate-500 text-center">Cette action supprimera toutes vos données locales</p>
                     </div>
                 </div>
 
+                <!-- SCREEN 4: ABOUT -->
                 <div id="screen-about" class="screen hidden max-w-2xl mx-auto text-center space-y-6">
                     <div class="w-20 h-20 bg-primary/20 rounded-3xl flex items-center justify-center mx-auto text-primary text-3xl">
-                        <i class="fa-solid fa-rocket"></i>
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </div>
-                    <h2 class="text-3xl font-bold uppercase tracking-tight">ImageAI <span class="text-primary font-black">Pro</span></h2>
-                    <p class="text-slate-400">Application gratuite de génération d'images haute performance utilisant les derniers modèles d'intelligence artificielle.</p>
+                    <h2 class="text-3xl font-bold uppercase tracking-tight">SmartImageAI</h2>
+                    <p class="text-slate-400 leading-relaxed">Application gratuite de génération d'images haute performance utilisant les derniers modèles d'intelligence artificielle.</p>
+                    
+                    <div class="bg-slate-900 rounded-3xl p-6 border border-slate-800 text-left space-y-4 mt-8">
+                        <h3 class="font-bold text-lg mb-4">Fonctionnalités</h3>
+                        <ul class="space-y-3 text-sm text-slate-400">
+                            <li class="flex items-center space-x-3">
+                                <i class="fa-solid fa-check text-green-400"></i>
+                                <span>Génération d'images par IA</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fa-solid fa-check text-green-400"></i>
+                                <span>100% gratuit et illimité</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fa-solid fa-check text-green-400"></i>
+                                <span>4 modèles IA disponibles</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fa-solid fa-check text-green-400"></i>
+                                <span>3 formats d'images</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fa-solid fa-check text-green-400"></i>
+                                <span>Historique complet</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fa-solid fa-check text-green-400"></i>
+                                <span>Téléchargement & Partage</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p class="text-slate-500 text-sm mt-8">
+                        Fait avec ❤️ pour les créatifs
+                    </p>
                 </div>
 
             </div>
 
+            <!-- BOTTOM NAVIGATION - VERSION MOBILE UNIQUEMENT -->
             <nav class="lg:hidden fixed bottom-0 left-0 right-0 h-20 bg-dark/80 backdrop-blur-xl border-t border-slate-800 flex items-center justify-around px-2 z-50">
-                <button data-screen="generator" class="nav-item-link active flex flex-col items-center space-y-1 p-2 min-w-[64px]">
+                <button data-screen="generator" class="nav-item active flex flex-col items-center space-y-1 p-2 min-w-[64px]">
                     <i class="fa-solid fa-wand-sparkles text-lg"></i>
                     <span class="text-[10px] font-bold uppercase">Créer</span>
                 </button>
-                <button data-screen="history" class="nav-item-link flex flex-col items-center space-y-1 p-2 min-w-[64px] opacity-40">
+                <button data-screen="history" class="nav-item flex flex-col items-center space-y-1 p-2 min-w-[64px] opacity-40">
                     <i class="fa-solid fa-box-archive text-lg"></i>
                     <span class="text-[10px] font-bold uppercase">Archives</span>
                 </button>
-                <button data-screen="settings" class="nav-item-link flex flex-col items-center space-y-1 p-2 min-w-[64px] opacity-40">
+                <button data-screen="settings" class="nav-item flex flex-col items-center space-y-1 p-2 min-w-[64px] opacity-40">
                     <i class="fa-solid fa-sliders text-lg"></i>
                     <span class="text-[10px] font-bold uppercase">Outils</span>
                 </button>
-                <button data-screen="about" class="nav-item-link flex flex-col items-center space-y-1 p-2 min-w-[64px] opacity-40">
+                <button data-screen="about" class="nav-item flex flex-col items-center space-y-1 p-2 min-w-[64px] opacity-40">
                     <i class="fa-solid fa-id-card-clip text-lg"></i>
                     <span class="text-[10px] font-bold uppercase">Infos</span>
                 </button>
@@ -218,16 +294,28 @@
         </main>
     </div>
 
+    <!-- Toast Notification -->
     <div id="toast" class="fixed top-8 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-2xl bg-slate-800 border border-slate-700 shadow-2xl transition-all duration-300 translate-y-[-100px] opacity-0 text-sm font-medium"></div>
 
-    <div id="image-modal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-dark/95 backdrop-blur-md"></div>
-        <div class="relative w-full max-w-4xl max-h-[90vh] flex flex-col items-center">
-            <button id="modal-close" class="absolute -top-12 right-0 text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
-            <img id="modal-image" class="w-full h-full object-contain rounded-xl" src="">
-            <div class="mt-4 flex space-x-4">
-                <button id="modal-download-btn" class="px-6 py-2 bg-white text-dark rounded-full font-bold text-sm"><i class="fa-solid fa-download mr-2"></i>Sauver</button>
-                <button id="modal-delete-btn" class="px-6 py-2 bg-red-500 text-white rounded-full font-bold text-sm"><i class="fa-solid fa-trash-can mr-2"></i>Effacer</button>
+    <!-- Image Modal -->
+    <div id="image-modal" class="fixed inset-0 z-[300] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-dark/95 backdrop-blur-md modal-overlay"></div>
+        <div class="relative w-full max-w-4xl max-h-[90vh] flex flex-col items-center z-10">
+            <button id="modal-close" class="absolute -top-12 right-0 text-white text-2xl hover:text-primary transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="modal-image" class="w-full h-full object-contain rounded-xl mb-4" src="" alt="Image en plein écran">
+            <p id="modal-prompt" class="text-slate-400 text-sm mb-4 text-center max-w-2xl"></p>
+            <div class="flex space-x-4">
+                <button id="modal-download-btn" class="px-6 py-2 bg-white text-dark rounded-full font-bold text-sm hover:scale-105 active:scale-95 transition-transform">
+                    <i class="fa-solid fa-download mr-2"></i>Télécharger
+                </button>
+                <button id="modal-share-btn" class="px-6 py-2 bg-primary text-white rounded-full font-bold text-sm hover:scale-105 active:scale-95 transition-transform">
+                    <i class="fa-solid fa-share-nodes mr-2"></i>Partager
+                </button>
+                <button id="modal-delete-btn" class="px-6 py-2 bg-red-500 text-white rounded-full font-bold text-sm hover:scale-105 active:scale-95 transition-transform">
+                    <i class="fa-solid fa-trash-can mr-2"></i>Supprimer
+                </button>
             </div>
         </div>
     </div>
