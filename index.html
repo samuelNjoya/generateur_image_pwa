@@ -163,9 +163,10 @@
                     </div>
 
                     <!-- Zone de saisie (en bas sur mobile, normale sur desktop) -->
-                    <div class="sticky lg:relative bottom-0 lg:bottom-auto left-0 right-0 py-4 lg:p-0 z-40 bg-dark lg:bg-transparent mt-auto">
+                    <div
+                        class="sticky lg:relative bottom-0 lg:bottom-auto left-0 right-0 py-4 lg:p-0 z-40 bg-dark lg:bg-transparent mt-auto">
                         <div class="max-w-4xl">
-                          
+
                             <div
                                 class="relative bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl focus-within:border-primary transition-colors">
 
@@ -355,28 +356,28 @@
         <div class="absolute inset-0 bg-dark/95 backdrop-blur-md modal-overlay"></div>
         <div class="relative w-full max-w-4xl max-h-[90vh] flex flex-col items-center z-10">
             <button id="modal-close"
-                class="absolute -top-12 right-0 text-white text-2xl hover:text-primary transition-colors">
+                class="absolute -top-8 right-0 text-white text-2xl hover:text-primary transition-colors">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <img id="modal-image" class="w-full h-full object-contain rounded-xl mb-4" src=""
-                alt="Image en plein écran">
-            <p id="modal-prompt" class="text-slate-400 text-sm mb-4 text-center max-w-2xl"></p>
-            <div class="flex flex-wrap justify-center gap-3 w-full px-2">
-    <button id="modal-download-btn"
-        class="flex items-center justify-center px-4 py-2 bg-white text-dark rounded-full font-bold text-xs sm:text-sm whitespace-nowrap hover:scale-105 active:scale-95 transition-transform">
-        <i class="fa-solid fa-download mr-2"></i><span>Télécharger</span>
-    </button>
-    
-    <button id="modal-share-btn"
-        class="flex items-center justify-center px-4 py-2 bg-primary text-white rounded-full font-bold text-xs sm:text-sm whitespace-nowrap hover:scale-105 active:scale-95 transition-transform">
-        <i class="fa-solid fa-share-nodes mr-2"></i><span>Partager</span>
-    </button>
-    
-    <button id="modal-delete-btn"
-        class="flex items-center justify-center px-4 py-2 bg-red-500 text-white rounded-full font-bold text-xs sm:text-sm whitespace-nowrap hover:scale-105 active:scale-95 transition-transform">
-        <i class="fa-solid fa-trash-can mr-2"></i><span>Supprimer</span>
-    </button>
-</div>
+            <div class="w-full flex-1 min-h-0 flex items-center justify-center mb-4">
+                <img id="modal-image" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl" src=""
+                    alt="Image en plein écran">
+            </div>
+            <p id="modal-prompt" class="text-slate-400 text-xs sm:text-sm mb-4 text-center max-w-2xl px-4 line-clamp-2 sm:line-clamp-none"></p>
+            <div class="flex flex-nowrap items-center justify-center gap-2 w-full max-w-md px-1 flex-shrink-0 pb-2">
+                <button id="modal-download-btn"
+                    class="flex items-center justify-center px-3 py-2 bg-white text-dark rounded-full font-bold text-[10px] sm:text-sm whitespace-nowrap flex-1 max-w-[120px]">
+                    <i class="fa-solid fa-download mr-1.5"></i>Télécharger
+                </button>
+                <button id="modal-share-btn"
+                    class="flex items-center justify-center px-3 py-2 bg-primary text-white rounded-full font-bold text-[10px] sm:text-sm whitespace-nowrap flex-1 max-w-[120px]">
+                    <i class="fa-solid fa-share-nodes mr-1.5"></i>Partager
+                </button>
+                <button id="modal-delete-btn"
+                    class="flex items-center justify-center px-3 py-2 bg-red-500 text-white rounded-full font-bold text-[10px] sm:text-sm whitespace-nowrap flex-1 max-w-[120px]">
+                    <i class="fa-solid fa-trash-can mr-1.5"></i>Supprimer
+                </button>
+            </div>
         </div>
     </div>
 
