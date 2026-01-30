@@ -114,7 +114,7 @@
             </header>
 
             <!-- Zone de contenu scrollable -->
-            <div id="main-content" class="flex-1 overflow-y-auto pb-40 lg:pb-10 px-4 pt-6">
+            <div id="main-content" class="flex-1 overflow-y-auto px-4">
 
                 <!-- SCREEN 1: GENERATOR -->
                 <div id="screen-generator" class="screen active max-w-4xl mx-auto h-full flex flex-col">
@@ -163,10 +163,8 @@
                     </div>
 
                     <!-- Zone de saisie (en bas sur mobile, normale sur desktop) -->
-                    <div
-                        class="sticky lg:relative bottom-0 lg:bottom-auto left-0 right-0 p-4 lg:p-0 z-40 bg-dark lg:bg-transparent mt-auto">
-                        <div class="max-w-4xl mx-auto">
-
+                    <div class="sticky lg:relative bottom-0 lg:bottom-auto left-0 right-0 py-4 lg:p-0 z-40 bg-dark lg:bg-transparent mt-auto">
+                        <div class="max-w-4xl">
                           
                             <div
                                 class="relative bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl focus-within:border-primary transition-colors">
@@ -363,20 +361,22 @@
             <img id="modal-image" class="w-full h-full object-contain rounded-xl mb-4" src=""
                 alt="Image en plein écran">
             <p id="modal-prompt" class="text-slate-400 text-sm mb-4 text-center max-w-2xl"></p>
-            <div class="flex space-x-4">
-                <button id="modal-download-btn"
-                    class="px-6 py-2 bg-white text-dark rounded-full font-bold text-sm hover:scale-105 active:scale-95 transition-transform">
-                    <i class="fa-solid fa-download mr-2"></i>Télécharger
-                </button>
-                <button id="modal-share-btn"
-                    class="px-6 py-2 bg-primary text-white rounded-full font-bold text-sm hover:scale-105 active:scale-95 transition-transform">
-                    <i class="fa-solid fa-share-nodes mr-2"></i>Partager
-                </button>
-                <button id="modal-delete-btn"
-                    class="px-6 py-2 bg-red-500 text-white rounded-full font-bold text-sm hover:scale-105 active:scale-95 transition-transform">
-                    <i class="fa-solid fa-trash-can mr-2"></i>Supprimer
-                </button>
-            </div>
+            <div class="flex flex-wrap justify-center gap-3 w-full px-2">
+    <button id="modal-download-btn"
+        class="flex items-center justify-center px-4 py-2 bg-white text-dark rounded-full font-bold text-xs sm:text-sm whitespace-nowrap hover:scale-105 active:scale-95 transition-transform">
+        <i class="fa-solid fa-download mr-2"></i><span>Télécharger</span>
+    </button>
+    
+    <button id="modal-share-btn"
+        class="flex items-center justify-center px-4 py-2 bg-primary text-white rounded-full font-bold text-xs sm:text-sm whitespace-nowrap hover:scale-105 active:scale-95 transition-transform">
+        <i class="fa-solid fa-share-nodes mr-2"></i><span>Partager</span>
+    </button>
+    
+    <button id="modal-delete-btn"
+        class="flex items-center justify-center px-4 py-2 bg-red-500 text-white rounded-full font-bold text-xs sm:text-sm whitespace-nowrap hover:scale-105 active:scale-95 transition-transform">
+        <i class="fa-solid fa-trash-can mr-2"></i><span>Supprimer</span>
+    </button>
+</div>
         </div>
     </div>
 

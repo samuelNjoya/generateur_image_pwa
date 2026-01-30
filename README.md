@@ -131,3 +131,17 @@ je suis bon
 
 ajout de l'api pour la traduction en anglais 
  const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=fr|en`);
+
+
+ Amélioration de prompt par IA (très impressionnant)
+
+ 🗣️ Commande vocale
+
+Dicter le prompt au lieu de taper
+Web Speech API (gratuit, natif navigateur)
+
+🔟 Mode "Storytelling" / BD automatique 📖
+
+Concept : Créer une série d'images cohérentes pour raconter une histoire
+Prompt intelligent : "Scène 1 : [description]", "Scène 2 : [suite]..."
+Style cohérent : Même seed + variations contrôlées

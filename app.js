@@ -340,7 +340,7 @@ async function handleGenerate() {
         updateStats();
 
         showToast(' Image créée avec succès !', 'success');
-        console.log("✅ Génération terminée !");
+        console.log(" Génération terminée !");
 
         promptInput.value = '';
         promptInput.style.height = 'auto'; // Reset la hauteur
