@@ -47,9 +47,9 @@ const SURPRISE_PROMPTS = [
 ];
 
 const POLLINATIONS_API = 'https://image.pollinations.ai/prompt/';
-const STORAGE_KEYS = { 
-    HISTORY: 'imageai_history', 
-    SETTINGS: 'imageai_settings' 
+const STORAGE_KEYS = {
+    HISTORY: 'imageai_history',
+    SETTINGS: 'imageai_settings'
 };
 
 // === INITIALISATION ===
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initApp() {
     console.log("🚀 SmartImageAI - Initialisation...");
-    
+
     // Masquer le splash screen après 2.5s
     setTimeout(() => {
         const splash = document.getElementById('splash-screen');
@@ -76,12 +76,45 @@ function initApp() {
     // Mettre à jour l'interface
     updateHistoryDisplay();
     updateStats();
-    
+
     initPWAInstallation(); //initialisation de la detection de la pwa
     // Initialiser l'écran par défaut
     switchScreen('generator');
-    
+
     console.log("✅ Application prête !");
+
+    // Pour mise a jour automatique
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').then(reg => {
+            // Cette fonction s'exécute quand un nouveau Service Worker est détecté
+            reg.onupdatefound = () => {
+                const installingWorker = reg.installing;
+                installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed') {
+                        if (navigator.serviceWorker.controller) {
+                            // Une nouvelle version a été installée en arrière-plan !
+                            console.log('✨ Nouvelle mise à jour détectée !');
+                            showToast("Mise à jour installée ! Redémarrage...", "info");
+
+                            // On attend 2 secondes pour que l'utilisateur lise le toast
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        }
+                    }
+                };
+            };
+        });
+
+        // Éviter les boucles de rechargement infinies
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+                window.location.reload();
+                refreshing = true;
+            }
+        });
+    }
 }
 
 // === SYSTÈME DE NAVIGATION (CORRIGÉ) ===
@@ -129,7 +162,7 @@ function switchScreen(screenName) {
         'settings': 'Paramètres',
         'about': 'À propos'
     };
-    
+
     const pageTitle = document.getElementById('page-title');
     if (pageTitle) {
         pageTitle.textContent = pageTitles[screenName] || 'SmartImageAI';
@@ -137,7 +170,7 @@ function switchScreen(screenName) {
 
     // 5. Sauvegarder l'état
     AppState.currentScreen = screenName;
-    
+
     // 6. Scroll vers le haut
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -162,7 +195,7 @@ function setupEventListeners() {
     // ===== TEXTAREA AUTO-RESIZE =====
     const promptInput = document.getElementById('prompt-input');
     if (promptInput) {
-        promptInput.addEventListener('input', function() {
+        promptInput.addEventListener('input', function () {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
         });
@@ -238,7 +271,7 @@ function setupEventListeners() {
     // ===== MODAL =====
     const modalClose = document.getElementById('modal-close');
     const modalOverlay = document.querySelector('.modal-overlay');
-    
+
     if (modalClose) {
         modalClose.addEventListener('click', closeModal);
     }
@@ -249,7 +282,7 @@ function setupEventListeners() {
     const modalDownloadBtn = document.getElementById('modal-download-btn');
     const modalShareBtn = document.getElementById('modal-share-btn');
     const modalDeleteBtn = document.getElementById('modal-delete-btn');
-    
+
     if (modalDownloadBtn) {
         modalDownloadBtn.addEventListener('click', handleModalDownload);
     }
@@ -304,11 +337,11 @@ async function handleGenerate() {
 
     try {
         console.log("🎨 Début de la génération...");
-        
+
         // 1. Traduction en anglais
         const translatedPrompt = await translateToEnglish(originalPrompt);
         console.log(`🌐 Traduit : ${translatedPrompt}`);
-        
+
         // 2. Enrichissement selon le modèle
         let finalPrompt = translatedPrompt;
         if (AppState.selectedModel === 'flux-realism') {
@@ -332,7 +365,7 @@ async function handleGenerate() {
         // 4. Génération de l'URL
         const seed = Math.floor(Math.random() * 999999);
         const imageUrl = `${POLLINATIONS_API}${encodeURIComponent(finalPrompt)}?width=${width}&height=${height}&model=${AppState.selectedModel}&seed=${seed}&nologo=true`;
-        
+
         console.log("🔗 URL générée :", imageUrl);
 
         // 5. Préchargement de l'image
@@ -344,7 +377,7 @@ async function handleGenerate() {
         const previewImage = document.getElementById('preview-image');
         const previewImageContainer = document.getElementById('preview-image-container');
         const previewPlaceholder = document.getElementById('preview-placeholder');
-        
+
         previewImage.src = imageUrl;
         previewImageContainer.classList.remove('hidden');
         previewPlaceholder.classList.add('hidden');
@@ -381,7 +414,7 @@ async function handleGenerate() {
 // === TRADUCTION ===
 async function translateToEnglish(text) {
     if (!text || text.length < 3) return text;
-    
+
     try {
         const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=fr|en`);
         const data = await response.json();
@@ -396,7 +429,7 @@ async function translateToEnglish(text) {
 function toggleLoading(isLoading) {
     const loader = document.getElementById('preview-loading');
     const generateBtn = document.getElementById('generate-btn');
-    
+
     if (isLoading) {
         loader.classList.remove('hidden');
         loader.classList.add('flex');
@@ -414,17 +447,17 @@ function toggleLoading(isLoading) {
 function handleSurprise() {
     const promptInput = document.getElementById('prompt-input');
     const randomPrompt = SURPRISE_PROMPTS[Math.floor(Math.random() * SURPRISE_PROMPTS.length)];
-    
+
     promptInput.value = randomPrompt;
     promptInput.dispatchEvent(new Event('input')); // Trigger auto-resize
-    
+
     // Animation visuelle
     promptInput.style.transition = 'all 0.3s ease';
     promptInput.style.transform = 'scale(1.02)';
     setTimeout(() => {
         promptInput.style.transform = 'scale(1)';
     }, 300);
-    
+
     showToast('Prompt aléatoire !', 'info');
 }
 
@@ -434,18 +467,18 @@ async function shareImage(url, title, text) {
         showToast(" Partage non disponible", "warning");
         return;
     }
-    
+
     try {
         const response = await fetch(url);
         const blob = await response.blob();
         const file = new File([blob], 'smartimageai.png', { type: 'image/png' });
-        
+
         await navigator.share({
             files: [file],
             title: title,
             text: text
         });
-        
+
         showToast(' Image partagée !', 'success');
     } catch (error) {
         if (error.name !== 'AbortError') {
@@ -458,7 +491,7 @@ async function shareImage(url, title, text) {
 async function downloadImage(url, filename) {
     try {
         showToast("⬇ Téléchargement...", "info");
-        
+
         const response = await fetch(url);
         const blob = await response.blob();
         const blobUrl = URL.createObjectURL(blob);
@@ -471,7 +504,7 @@ async function downloadImage(url, filename) {
         document.body.removeChild(link);
 
         URL.revokeObjectURL(blobUrl);
-        
+
         showToast(' Image téléchargée !', 'success');
     } catch (error) {
         console.error("Erreur téléchargement :", error);
@@ -602,7 +635,7 @@ function handleResetApp() {
     updateStats();
 
     showToast(' Application réinitialisée', 'success');
-    
+
     setTimeout(() => {
         window.location.reload();
     }, 1500);
@@ -717,7 +750,7 @@ function isIOS() {
         'iPad Simulator', 'iPhone Simulator', 'iPod Simulator',
         'iPad', 'iPhone', 'iPod'
     ].includes(navigator.platform)
-    || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+        || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
 }
 
 function isInStandaloneMode() {
