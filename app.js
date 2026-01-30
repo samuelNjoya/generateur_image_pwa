@@ -10,6 +10,7 @@ const AppState = {
     selectedSize: 'square',
     isGenerating: false,
     selectedModel: 'flux',
+    deferredPrompt: null, // pour l'installation
 };
 
 const SURPRISE_PROMPTS = [
@@ -76,6 +77,7 @@ function initApp() {
     updateHistoryDisplay();
     updateStats();
     
+    initPWAInstallation(); //initialisation de la detection de la pwa
     // Initialiser l'écran par défaut
     switchScreen('generator');
     
@@ -256,6 +258,29 @@ function setupEventListeners() {
     }
     if (modalDeleteBtn) {
         modalDeleteBtn.addEventListener('click', handleModalDelete);
+    }
+
+    // ===== PWA INSTALLATION ===== 
+    const pwaInstallBtn = document.getElementById('pwa-install-btn');
+    const pwaCloseBtn = document.getElementById('pwa-close-btn');
+
+    if (pwaInstallBtn) {
+        pwaInstallBtn.addEventListener('click', async () => {
+            if (AppState.deferredPrompt) {
+                AppState.deferredPrompt.prompt();
+                const { outcome } = await AppState.deferredPrompt.userChoice;
+                console.log(`Résultat installation: ${outcome}`);
+                AppState.deferredPrompt = null;
+                hidePWABanner();
+            }
+        });
+    }
+
+    if (pwaCloseBtn) {
+        pwaCloseBtn.addEventListener('click', () => {
+            hidePWABanner();
+            localStorage.setItem('pwa_dismissed', 'true');
+        });
     }
 }
 
@@ -685,10 +710,59 @@ window.addEventListener('offline', () => {
     showToast(' Hors ligne', 'warning');
 });
 
-// === DEBUG (à retirer en production) ===
-console.log(`
-╔═══════════════════════════════════╗
-║   SmartImageAI v2.0 - CORRIGÉE  ║
-║   Navigation harmonisée ✅        ║
-╚═══════════════════════════════════╝
-`);
+
+// === LOGIQUE PWA (INSTALLATION) ===
+function isIOS() {
+    return [
+        'iPad Simulator', 'iPhone Simulator', 'iPod Simulator',
+        'iPad', 'iPhone', 'iPod'
+    ].includes(navigator.platform)
+    || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+}
+
+function isInStandaloneMode() {
+    return ('standalone' in window.navigator) && (window.navigator.standalone);
+}
+
+function initPWAInstallation() {
+    const banner = document.getElementById('pwa-install-banner');
+    if (!banner) return;
+
+    const iosText = document.getElementById('pwa-text-ios');
+    const androidText = document.getElementById('pwa-text-android');
+    const installBtn = document.getElementById('pwa-install-btn');
+
+    // Détection iOS
+    if (isIOS() && !isInStandaloneMode()) {
+        if (localStorage.getItem('pwa_dismissed')) return;
+
+        setTimeout(() => {
+            banner.classList.remove('hidden');
+            if (installBtn) installBtn.classList.add('hidden');
+            if (iosText) iosText.classList.remove('hidden');
+            if (androidText) androidText.classList.add('hidden');
+            setTimeout(() => banner.classList.remove('translate-y-60'), 100);
+        }, 6000); // 6 secondes après le chargement
+    }
+
+    // Détection Android / Chrome Desktop
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        AppState.deferredPrompt = e;
+
+        if (localStorage.getItem('pwa_dismissed')) return;
+
+        setTimeout(() => {
+            banner.classList.remove('hidden');
+            setTimeout(() => banner.classList.remove('translate-y-60'), 100);
+        }, 3000); // 3 secondes après le chargement
+    });
+}
+
+function hidePWABanner() {
+    const banner = document.getElementById('pwa-install-banner');
+    if (banner) {
+        banner.classList.add('translate-y-60');
+        setTimeout(() => banner.classList.add('hidden'), 500);
+    }
+}

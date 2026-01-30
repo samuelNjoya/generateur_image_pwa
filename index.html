@@ -363,7 +363,9 @@
                 <img id="modal-image" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl" src=""
                     alt="Image en plein écran">
             </div>
-            <p id="modal-prompt" class="text-slate-400 text-xs sm:text-sm mb-4 text-center max-w-2xl px-4 line-clamp-2 sm:line-clamp-none"></p>
+            <p id="modal-prompt"
+                class="text-slate-400 text-xs sm:text-sm mb-4 text-center max-w-2xl px-4 line-clamp-2 sm:line-clamp-none">
+            </p>
             <div class="flex flex-nowrap items-center justify-center gap-2 w-full max-w-md px-1 flex-shrink-0 pb-2">
                 <button id="modal-download-btn"
                     class="flex items-center justify-center px-3 py-2 bg-white text-dark rounded-full font-bold text-[10px] sm:text-sm whitespace-nowrap flex-1 max-w-[120px]">
@@ -381,6 +383,29 @@
         </div>
     </div>
 
+    <div id="pwa-install-banner"
+        class="fixed bottom-24 left-4 right-4 z-[400] bg-slate-900 border border-slate-700 p-4 rounded-2xl shadow-2xl transform translate-y-60 transition-transform duration-500 hidden">
+        <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white text-xl shadow-lg">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div class="flex-1">
+                <h4 class="text-white font-bold text-sm">Installer SmartImageAI</h4>
+                <p id="pwa-text-android" class="text-slate-400 text-[10px]">Accédez à l'IA plus rapidement depuis votre
+                    écran d'accueil.</p>
+                <p id="pwa-text-ios" class="text-slate-400 text-[10px] hidden">Cliquez sur <i
+                        class="fa-solid fa-share-from-square text-primary"></i> puis sur <strong class="text-white">"Sur
+                        l'écran d'accueil"</strong>.</p>
+            </div>
+        </div>
+
+        <div class="flex space-x-3 mt-4">
+            <button id="pwa-install-btn"
+                class="flex-1 py-2 bg-primary text-white rounded-xl font-bold text-xs">Installer</button>
+            <button id="pwa-close-btn" class="flex-1 py-2 bg-slate-800 text-slate-300 rounded-xl font-bold text-xs">Plus
+                tard</button>
+        </div>
+    </div>
     <script src="app.js"></script>
 </body>
 
