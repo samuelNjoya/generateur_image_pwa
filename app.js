@@ -22,7 +22,27 @@ const SURPRISE_PROMPTS = [
     "Le portrait d'un lion fait entièrement de galaxies et de nébuleuses étoilées",
     "Une villa moderne en verre suspendue à une falaise au-dessus de la mer",
     "Une ville futuriste sous l'océan avec des dômes de verre et des poissons néons",
-    "Un vieux renard bibliothécaire portant des lunettes, style peinture à l'huile"
+    "Un vieux renard bibliothécaire portant des lunettes, style peinture à l'huile",
+    "Un phénix fait de flammes arc-en-ciel s'élevant d'un volcan de cristal",
+    "Une baleine volante traversant des nuages roses au coucher du soleil",
+    "Un temple japonais flottant dans l'espace entouré d'aurores boréales",
+    "Un loup fantôme transparent courant dans une forêt de bambous la nuit",
+    "Une bibliothèque infinie avec des escaliers impossibles, style M.C. Escher",
+    "Un samouraï robot steampunk avec des engrenages dorés et vapeur",
+    "Un jardin zen avec des rochers flottants et cascade inversée",
+    "Une méduse bioluminescente géante illuminant les profondeurs océaniques",
+    "Un dragon chinois fait de nuages dorés volant autour d'une montagne",
+    "Une sorcière moderne dans son laboratoire high-tech avec potions holographiques",
+    "Un cerf majestueux aux bois faits de branches d'arbres en fleurs",
+    "Une cité maya futuriste mêlant pyramides anciennes et néons cyberpunk",
+    "Un phoenix mécanique aux plumes métalliques brillantes s'envolant",
+    "Un guerrier tribal africain avec armure tribale lumineuse, fond savane",
+    "Une danseuse de ballet suspendue dans les airs entourée de papillons lumineux",
+    "Un vaisseau spatial organique en forme de méduse traversant une nébuleuse",
+    "Un château médiéval inversé accroché sous des îles flottantes",
+    "Un samouraï cyberpunk avec katana laser dans une rue de Tokyo futuriste",
+    "Une licorne cosmique galopant sur un arc-en-ciel entre les étoiles",
+    "Un phoenix de glace aux ailes cristallines dans une tempête de neige arctique"
 ];
 
 const POLLINATIONS_API = 'https://image.pollinations.ai/prompt/';
@@ -245,12 +265,12 @@ async function handleGenerate() {
     const originalPrompt = promptInput.value.trim();
 
     if (!originalPrompt) {
-        showToast('⚠️ Veuillez entrer une description', 'warning');
+        showToast(' Veuillez entrer une description', 'warning');
         return;
     }
 
     if (AppState.isGenerating) {
-        showToast('⏳ Génération en cours...', 'info');
+        showToast(' Génération en cours...', 'info');
         return;
     }
 
@@ -319,12 +339,14 @@ async function handleGenerate() {
         updateHistoryDisplay();
         updateStats();
 
-        showToast('✨ Image créée avec succès !', 'success');
+        showToast(' Image créée avec succès !', 'success');
         console.log("✅ Génération terminée !");
 
+        promptInput.value = '';
+        promptInput.style.height = 'auto'; // Reset la hauteur
     } catch (error) {
         console.error("❌ Erreur de génération :", error);
-        showToast('❌ Erreur lors de la génération', 'error');
+        showToast(' Erreur lors de la génération', 'error');
     } finally {
         AppState.isGenerating = false;
         toggleLoading(false);
@@ -340,7 +362,7 @@ async function translateToEnglish(text) {
         const data = await response.json();
         return data.responseData.translatedText || text;
     } catch (error) {
-        console.warn("⚠️ Traduction échouée, utilisation du texte original");
+        console.warn(" Traduction échouée, utilisation du texte original");
         return text;
     }
 }
@@ -378,13 +400,13 @@ function handleSurprise() {
         promptInput.style.transform = 'scale(1)';
     }, 300);
     
-    showToast('🎲 Prompt aléatoire !', 'info');
+    showToast('Prompt aléatoire !', 'info');
 }
 
 // === PARTAGE ===
 async function shareImage(url, title, text) {
     if (!navigator.share) {
-        showToast("⚠️ Partage non disponible", "warning");
+        showToast(" Partage non disponible", "warning");
         return;
     }
     
@@ -399,7 +421,7 @@ async function shareImage(url, title, text) {
             text: text
         });
         
-        showToast('✅ Image partagée !', 'success');
+        showToast(' Image partagée !', 'success');
     } catch (error) {
         if (error.name !== 'AbortError') {
             console.error("Erreur de partage :", error);
@@ -410,7 +432,7 @@ async function shareImage(url, title, text) {
 // === TÉLÉCHARGEMENT ===
 async function downloadImage(url, filename) {
     try {
-        showToast("⬇️ Téléchargement...", "info");
+        showToast("⬇ Téléchargement...", "info");
         
         const response = await fetch(url);
         const blob = await response.blob();
@@ -425,10 +447,10 @@ async function downloadImage(url, filename) {
 
         URL.revokeObjectURL(blobUrl);
         
-        showToast('✅ Image téléchargée !', 'success');
+        showToast(' Image téléchargée !', 'success');
     } catch (error) {
         console.error("Erreur téléchargement :", error);
-        showToast('❌ Erreur de téléchargement', 'error');
+        showToast(' Erreur de téléchargement', 'error');
     }
 }
 
@@ -468,7 +490,7 @@ function updateStats() {
 }
 
 function handleClearHistory() {
-    if (!confirm("⚠️ Effacer tout l'historique ? Cette action est irréversible.")) {
+    if (!confirm(" Effacer tout l'historique ? Cette action est irréversible.")) {
         return;
     }
 
@@ -476,7 +498,7 @@ function handleClearHistory() {
     saveHistory();
     updateHistoryDisplay();
     updateStats();
-    showToast('🗑️ Historique vidé', 'success');
+    showToast(' Historique vidé', 'success');
 }
 
 // === MODAL ===
@@ -537,12 +559,12 @@ function handleModalDelete() {
     updateHistoryDisplay();
     updateStats();
     closeModal();
-    showToast('🗑️ Image supprimée', 'success');
+    showToast(' Image supprimée', 'success');
 }
 
 // === PARAMÈTRES ===
 function handleResetApp() {
-    if (!confirm('⚠️ Réinitialiser l\'application ? Toutes vos données seront supprimées.')) {
+    if (!confirm(' Réinitialiser l\'application ? Toutes vos données seront supprimées.')) {
         return;
     }
 
@@ -554,7 +576,7 @@ function handleResetApp() {
     updateHistoryDisplay();
     updateStats();
 
-    showToast('🔄 Application réinitialisée', 'success');
+    showToast(' Application réinitialisée', 'success');
     
     setTimeout(() => {
         window.location.reload();
@@ -656,11 +678,11 @@ function showToast(message, type = 'info') {
 
 // === NETWORK STATUS ===
 window.addEventListener('online', () => {
-    showToast('🌐 Connexion rétablie', 'success');
+    showToast(' Connexion rétablie', 'success');
 });
 
 window.addEventListener('offline', () => {
-    showToast('📡 Hors ligne', 'warning');
+    showToast(' Hors ligne', 'warning');
 });
 
 // === DEBUG (à retirer en production) ===
