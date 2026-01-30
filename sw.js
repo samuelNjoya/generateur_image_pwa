@@ -4,7 +4,7 @@
 // ============================================
 
 // 1. Incrémente cette version (ex: v1.0.1) chaque fois que tu changes ton CSS ou JS
-const CACHE_NAME = 'imageai-v1.0.0'; 
+const CACHE_NAME = 'imageai-v1.0.1'; 
 
 const ASSETS_TO_CACHE = [
     '/',
